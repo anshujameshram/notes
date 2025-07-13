@@ -1,0 +1,86 @@
+✅ Composition Example
+🔸 Example: House has a Room
+A Room cannot exist without a House.
+
+If the House is destroyed, the Room is also destroyed.
+
+class Room {
+    void roomDetails() {
+        System.out.println("This is a room.");
+    }
+}
+
+class House {
+    private Room room;
+
+    public House() {
+        room = new Room(); // Room is created inside House
+    }
+
+    void showHouseDetails() {
+        room.roomDetails();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        House house = new House();
+        house.showHouseDetails();
+    }
+}
+✅ Explanation:
+The Room object is part of the House.
+
+You cannot reuse the same Room object in another house.
+
+When House is deleted, the Room is deleted too.
+
+✅ Aggregation Example
+🔸 Example: Library has Books
+A Book can exist without a Library.
+
+The same Book can be placed in multiple Libraries.
+
+class Book {
+    String title;
+
+    public Book(String title) {
+        this.title = title;
+    }
+
+    void bookDetails() {
+        System.out.println("Book Title: " + title);
+    }
+}
+
+class Library {
+    private Book book; // Aggregation
+
+    public Library(Book book) {
+        this.book = book; // Book is passed from outside
+    }
+
+    void showLibraryDetails() {
+        book.bookDetails();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Book b1 = new Book("Java Basics"); // Book exists independently
+        Library lib = new Library(b1);
+        lib.showLibraryDetails();
+    }
+}
+✅ Explanation:
+The Book object is not owned by the Library.
+
+The same Book can be reused elsewhere (e.g., in another library).
+
+If Library is destroyed, the Book still exists.
+
+🧠 Summary in Simple Words:
+Concept			Composition			Aggregation
+Ownership		Owns the part (strong)		Uses the part (weak)
+Dependency		Part can’t live without whole	Part can live independently
+Example			House → Room			Library → Book

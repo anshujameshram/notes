@@ -1,0 +1,105 @@
+Explain the following text primarily based on the surrounding page content: 
+Accessing inner class code from static area of outer class: 
+Example: 
+class Outer { 
+class Inner 
+{ 
+public void methodOne()
+{ System.out.println("inner class method"); } 
+} 
+public static void main(String[] args)
+ { } 
+
+} 
+
+Acc
+In Java, non-static inner classes (like Inner in this example) are associated with an instance of the outer class (Outer). That means, to access an inner class from a static context—like the main method of the outer class—you first need to create an instance of the outer class, and then use it to create an instance of the inner class.
+
+Let’s complete and explain the code accordingly:
+
+java
+class Outer {
+    class Inner {
+        public void methodOne() {
+            System.out.println("inner class method");
+        }
+    }
+
+    public static void main(String[] args) {
+        Outer o = new Outer();           // Step 1: Create an instance of Outer
+        Outer.Inner i = o.new Inner();   // Step 2: Use Outer instance to create Inner
+        i.methodOne();                   // Step 3: Call the inner class method
+    }
+}
+Why is this necessary?
+Because the main method is static, it does not belong to any instance of the Outer class. But the Inner class is a non-static inner class, so it requires a specific instance of the Outer class in order to be created.
+
+If Inner were declared static (e.g., static class Inner), then you could directly instantiate it from the static context using:
+
+java
+Outer.Inner i = new Outer.Inner();
+So, the key takeaway is: Non-static inner classes cannot be accessed directly from static contexts—they need an enclosing instance.
+
+
+modifiers we can use for inner classes-
+------------------------------------------
+for inner classes—
+because they live inside another class and aren't top-level—they can use not only all the above but also additional modifiers, such as:
+
+private: accessible only within the outer class
+
+protected: accessible within the same package or subclasses
+
+static: makes the inner class behave like a static nested class
+
+synchronized, volatile, transient, and native: depending on context (e.g. members inside the inner class)
+
+
+
+class Test { 
+int i=10; 
+static int j=20; 
+public void methodOne() 
+{
+ int k=30; final int l=40; 
+class Inner { 
+public void methodTwo() 
+{ System.out.println(i); 
+System.out.println(j); //-->line 1 
+System.out.println(k);
+ System.out.println(l);
+ } }
+ Inner i=new Inner(); 
+i.methodTwo(); } 
+public static void main(String[] args) 
+{ 
+new Test().methodOne(); 
+} } 
+At line 1 which of the following variables we can access ? 
+If we declare methodOne() method as static then which variables we can access at line 1 ?
+
+Great question, Anshuja! You're diving into one of the most nuanced parts of Java: variable scoping in local inner classes. Let’s decode what’s happening at line 1 with and without the static modifier on methodOne().
+
+✅ Case 1: methodOne() is non-static (as in the original code)
+In the Inner class (a local inner class inside a method), you’re trying to access:
+
+Variable	Declared In			Modifier	Accessible at Line 1?	Reason
+i		Instance variable of Test	non-static	✔️ Yes			Local inner class has access to instance variables
+j		Class variable of Test		static		✔️ Yes			Static members are accessible inside all inner classes
+k		Local variable in methodOne()	non-final	❌ No			Must be effectively final to be accessible
+l		Local variable in methodOne()	final		✔️ Yes			Final local variables are allowed inside local inner classes
+So, i, j, and l are accessible. k is not, because it's neither final nor effectively final.
+
+🚫 Case 2: methodOne() is made static
+Here's the twist: you lose access to the instance variable i, because static methods can't reference instance members without an object. Now let’s re-evaluate:
+
+Variable	Declared In		Modifier	Accessible at Line 1?	Reason
+i		Instance variable	non-static	❌ No			Static context can't access instance variables directly
+j		Static variable		static		✔️ Yes			Static variables are accessible from static context
+k		Local variable		non-final	❌ No			Still not final
+l		Local variable		final		✔️ Yes			Final → OK for inner class use
+So with methodOne() as static, only j and l are accessible at line 1.
+
+
+
+

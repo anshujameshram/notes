@@ -1,0 +1,7 @@
+In the Java Virtual Machine (JVM), the class loader is a type of subsystem. It is used for loading class files. When you run the program, it will be first loaded by the class loader. The built-in class loaders are of three types in Java-
+
+The Bootstrap Classloader is the first-class loader in JVM. It is the superclass of the Extension class loader. It loads the rt.jar file that constitutes all the class files of Java Standard Edition. The files being java.lang package classes, java.net package classes, java.util packages classes, java.io packages classes, java.sql packages classes, etc.
+
+The Extension Classloader is the class loader of Bootstrap and the parent class loader of the system classloader. It generally loads the jar files located inside the $JAVA_HOME_/jre/lib/ext directory.
+
+The System Application Classloader is the type child class loader of the Extension class loader. From the cross path, the System Application Classloader loads the class files. It is by default; the classpath is set to the current directory. Therefore, it is also called the Application class loader.
