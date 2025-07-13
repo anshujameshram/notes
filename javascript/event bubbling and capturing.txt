@@ -1,0 +1,190 @@
+Event Bubbling and Capturing are two phases of how events propagate in the DOM (Document Object Model) when an event is triggered on an element.
+
+🔄 Event Propagation Phases
+When an event (like a click) happens, it goes through three phases:
+
+1.Capturing Phase (Trickling Down)
+
+The event starts from the window and goes down the DOM tree to the target element.
+Also called "capture phase" or "trickle-down phase".
+
+2.Target Phase
+
+The event reaches the actual target element.
+
+3.Bubbling Phase (Bubbling Up)
+
+The event bubbles up from the target element back to the window.
+
+
+example DOM-
+<div id="parent">
+  <button id="child">Click Me</button>
+</div>
+
+event bubbling-
+------------------
+document.getElementById("parent").addEventListener("click", () => {
+  console.log("Parent clicked");
+}, false); // bubbling   //false by default
+
+document.getElementById("child").addEventListener("click", () => {
+  console.log("Child clicked");
+}, false); // bubbling
+
+
+output-
+Child clicked
+Parent clicked
+
+
+➡️ This is event bubbling: child fires first, then it bubbles up to parent.
+
+
+event capturing/trickling-
+---------------------------
+
+document.getElementById("parent").addEventListener("click", () => {
+  console.log("Parent clicked during capture");
+}, true); // useCapture = true
+
+document.getElementById("child").addEventListener("click", () => {
+  console.log("Child clicked");
+}, false);
+
+
+output-
+Parent clicked during capture
+Child clicked
+
+
+➡️ This is event capturing: parent listens during the capture phase before the event reaches the child.
+
+
+Summary-
+----------
+
+| Feature                 | Capturing (Trickling) | Bubbling (Default)           |
+| ----------------------- | --------------------- | ---------------------------- |
+| Direction               | Top → Target          | Target → Top                 |
+| Set in addEventListener | `useCapture = true`   | `useCapture = false` or omit |
+| Commonly used           | Less common           | Most events bubble           |
+
+
+
+💡 Tip
+To stop event propagation:
+
+event.stopPropagation() → Stops bubbling/capturing further.
+event.stopImmediatePropagation() → Also prevents other listeners on the same element.
+
+
+
+
+example-
+<div id="grandparent">
+	<div id="parent">
+		<div id="child">
+		</div>
+	</div>
+</div>
+
+document.querySElector("#grandparent").addEventListener('click',()=>{
+console.log("grandparent clicked!")
+},false);
+
+document.querySElector("#parent").addEventListener('click',()=>{
+console.log("parent clicked!")
+},false);
+
+document.querySElector("#child").addEventListener('click',()=>{
+console.log("child clicked!")
+},false);
+
+
+
+output-
+-----------
+if i click child then,
+
+child 
+parent
+grandparent
+
+if i click grandparent then,
+
+grandparent
+
+
+
+
+if we mention true in second argument then,
+
+grandparent
+parent
+child
+
+
+
+document.querySElector("#grandparent").addEventListener('click',(e)=>{
+console.log("grandparent clicked!")
+},true);  //capturing
+ 
+document.querySElector("#parent").addEventListener('click',(e)=>{
+console.log("parent clicked!")
+},false); //bubbling
+
+document.querySElector("#child").addEventListener('click',(e)=>{
+console.log("child clicked!")
+},true);  //capturing
+
+
+output-
+grandparent
+child
+parent
+
+
+first capturing happens then bubbling.
+
+Explanation-
+--------------
+
+Event bubbling in JavaScript is a mechanism where an event triggered on a child element propagates upward through its ancestors in the DOM. It allows parent elements to respond to events triggered by their child elements.
+
+
+Propagation Direction: In event bubbling, the event starts at the target element and propagates upward through its parent elements to the root of the DOM.
+Default Behavior: Event bubbling is enabled by default in JavaScript.
+Event Listeners: If multiple event listeners are attached in the bubbling phase, they are executed in sequence, starting from the innermost target element.
+
+Event Bubbling in JavaScript
+Event Triggering: The click event is triggered on the child element (button), initiating the event propagation.
+Event Capturing: In the capturing phase, the event propagates from the root of the DOM down to the target (child). However, no listeners are explicitly set to handle events in this phase in the given code.
+Event Bubbling: After reaching the target element (child), the event enters the bubbling phase, propagating back up through the DOM tree to the parent (parent).
+Listener Behavior: Event listeners are attached to both parent and child elements using addEventListener. By default, these listeners respond during the bubbling phase unless the capture option is set to true.
+Execution Order: When the button is clicked, the child listener executes first (console.log("Child")), followed by the parent listener (console.log("Parent")) as the event bubbles up.
+
+
+
+Event Bubbling                                                                             Event Capturing
+The event starts at the target element and propagates upward to the root of the DOM.       The event starts at the root of the DOM and propagates downward to the target element.
+
+Event listeners are attached to handle events during the bubbling phase by default.	   To handle events in the capturing phase, you must explicitly set the capture option to true in addEventListener.
+
+Often used when you want parent elements to respond to events triggered on child 
+elements (e.g., event delegation).							   Useful when you want parent elements to handle the event before it reaches the target element.
+
+Inner (child) elements execute their event listeners first, followed by outer 		   Outer (parent) elements execute their event listeners first, followed by inner (child) elements (parent) elements as the event propagates upward.					   as the event propagates downward.
+
+
+Supported by all modern browsers and has been the default behavior for a	           Supported, but less commonly used as it requires the explicit capture option to be enabled
+long time.
+
+
+
+
+
+
+
+
+

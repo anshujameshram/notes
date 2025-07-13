@@ -1,0 +1,91 @@
+shallow copy
+--------------
+
+
+Using Object.assign():
+----------------------------
+const original = { a: 1, b: 2 };
+const copy = Object.assign({}, original);
+
+✅ Using Spread Operator:
+----------------------------
+const original = { a: 1, b: 2 };
+const copy = { ...original };
+
+Using slice():
+------------------
+const original = [1, 2, 3];
+const copy = original.slice();
+
+Array.from
+-----------
+
+
+Important Note on Shallow Copy
+------------------------------------
+A shallow copy only copies top-level properties. If the object or array contains nested objects, those inner objects are still referenced (not deeply copied).
+
+ex-
+const original = { a: 1, b: { x: 10 } };
+const copy = { ...original };
+
+copy.b.x = 99;
+
+console.log(original.b.x); // 99 (changed!)
+
+This happens because copy.b and original.b point to the same object.
+
+
+deep copy
+-----------
+
+To create a deep copy (also called deep clone) in JavaScript — meaning a completely independent copy of an object/array, including all nested levels .
+
+
+1.structuredClone() -
+
+const original = { a: 1, b: { c: 2 } };
+const deepCloned = structuredClone(original);
+
+deepCloned.b.c = 99;
+console.log(original.b.c); // 2 ✅ original is unaffected
+
+
+✅ Works in modern browsers and Node.js (v17+)
+❌ Doesn’t support functions, DOM elements, or special objects like Map, Set, etc.
+
+
+
+
+ 2. JSON.parse(JSON.stringify(...)) 😐 (Common but limited)
+
+const original = { a: 1, b: { c: 2 } };
+const deepCloned = JSON.parse(JSON.stringify(original));
+
+
+
+✅ Handles deeply nested objects
+❌ Loses functions, undefined, Date, Map, Set, etc.
+
+
+3. Using Libraries like Lodash
+
+npm install lodash
+
+import cloneDeep from 'lodash/cloneDeep';
+
+const original = { a: 1, b: { c: 2 } };
+const deepCloned = cloneDeep(original);
+
+✅ Handles most edge cases: functions, dates, maps, etc.
+✅ Widely used in large projects
+
+
+
+
+
+
+
+
+
+

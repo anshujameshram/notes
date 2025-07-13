@@ -1,0 +1,178 @@
+IIFE- immediately invoked function expression.
+
+Immediately Invoked Function Expressions (IIFE) are JavaScript functions that are executed immediately after they are defined. They are typically used to create a local scope for variables to prevent them from polluting the global scope.
+
+Syntax:
+
+(function (){ 
+// Function Logic Here. 
+})();
+Immediately Invoked Function Expressions (IIFE) Examples
+Example: Here's a basic example of an IIFE .
+
+
+
+
+(function() {
+    // IIFE code block
+    var localVar = 'This is a local variable';
+    console.log(localVar); // Output: This is a local variable
+})();
+
+Output
+This is a local variable
+Explanation: The function is wrapped in parentheses (function() { ... }), followed by () to immediately invoke it.
+
+Example 2: Here's another example of an IIFE that stores and display result.
+
+
+
+
+var result = (function() {
+    var x = 10;
+    var y = 20;
+    return x + y;
+})();
+​
+console.log(result); // Output: 30
+
+Output
+30
+Explanation: The IIFE is immediately invoked and returns the sum of x and y. The result of the IIFE, which is 30, is assigned to the variable result.
+
+IIFEs are commonly used to create private scope in JavaScript, allowing variables and functions to be encapsulated and inaccessible from outside the function.
+
+Example: Here's an example demonstrating how an IIFE can be used to create private variables:
+
+
+
+
+var counter = (function() {
+    var count = 0;
+​
+    return {
+        increment: function() {
+            count++;
+        },
+        decrement: function() {
+            count--;
+        },
+        getCount: function() {
+            return count;
+        }
+    };
+})();
+​
+// Increment the counter
+counter.increment();
+counter.increment();
+counter.increment();
+​
+console.log(counter.getCount()); // Output: 3
+​
+// Trying to access the private count variable directly
+console.log(counter.count); // Output: undefined (cannot access private variable)
+
+Output
+3
+undefined
+Explanation: Here, count is a private variable scoped to the IIFE, inaccessible from outside. The returned object exposes methods (increment, decrement, and getCount) that allow controlled manipulation and access to the private count variable.
+
+Use Cases Of IIFE
+Avoid polluting the global namespace.
+To create closures in JavaScript.
+IIFE is used to create private and  public variables and methods.
+It is used to execute the async and await function.
+It is used to work with require function.
+
+
+another defination-
+An IIFE (Immediately Invoked Function Expression) is an idiom in which a JavaScript function runs as soon as it is defined. It is also known as a self-executing anonymous function. 
+
+// standard IIFE
+(function () {
+  // statements…
+})();
+
+// arrow function variant
+(() => {
+  // statements…
+})();
+
+// async IIFE
+(async () => {
+  // statements…
+})();
+
+
+Why Use IIFE?
+IIFEs are mainly used to:
+
+Avoid polluting the global scope
+Create a private scope (closure)
+Execute code immediately without needing to call it separately
+
+Example 1: Variable Scope Isolation
+
+var a = 10;
+
+(function() {
+    var a = 20;
+    console.log("Inside IIFE: ", a); // 20
+})();
+
+console.log("Outside IIFE: ", a); // 10
+
+
+The variable a inside the IIFE does not affect the global a.
+
+ Example 2: Avoiding Global Variables
+
+(function() {
+    var message = "Hello from IIFE";
+    console.log(message);
+})();
+
+console.log(message); // ❌ Error: message is not defined
+
+
+The message variable is scoped inside the IIFE.
+
+
+Example 3: IIFE with Parameters
+
+(function(name) {
+    console.log("Hello, " + name + "!");
+})("Anshuja");
+
+
+output-
+Hello, Anshuja!
+
+
+
+* Real-World Use Case: Loop with Closure (Before let existed)
+
+for (var i = 0; i < 3; i++) {
+    (function(index) {
+        setTimeout(function() {
+            console.log(index); // 0, 1, 2
+        }, 1000);
+    })(i);
+}
+
+
+Without the IIFE, you'd get 3, 3, 3 because var is function-scoped, not block-scoped.
+
+
+
+| Feature          | Explanation                                             |
+| ---------------- | ------------------------------------------------------- |
+| What it is       | A function that runs immediately after it's defined     |
+| Why used         | To create a private scope, avoid polluting global scope |
+| Common use cases | Module pattern, loop closures, initialization logic     |
+| Safe & popular?  | Yes, especially before ES6 modules and `let/const`      |
+
+
+
+

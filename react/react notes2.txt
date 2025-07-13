@@ -1,0 +1,981 @@
+The old way to render the website was ---> server side rendering.
+
+on server side, website is assembled on backend  --> so the html, css and js code sent to client side  so to the web browser that requested the page -->shows it on the screen.
+
+
+modern way- client side rendering-->
+
+rendering of webpage shifted from server to client. it need data which will come from backend in form of API.
+
+
+front end web app--> handling data + displaying data in UI
+imp is- UI needs to stay in sync with data.
+
+
+Keeping UI and data in sync would be virtually impossible with just vanilla javascript.why?
+
+->1. requires lot of direct DOM manipulation.(spaghetti code)
+2. Data(state) is usually store in the DOM shared across entire app.
+
+why front end framework exist?
+
+1.keeping a user interface in sync with data is really hard and a lot of work. React, Angular and Vue keeps the synchronizing data with user interface away from developer. Data -><- UI
+
+2.They enforce a correct way of structuring and writing code (therefore contributing to solving the problem of "spaghetti 
+code").
+
+3.They give developers and teams a consistent way of  building front end applications.
+
+JavaScript is a programming language that’s mainly used for adding interactivity and functionality to web pages. It's supported by all modern browsers and is an essential part of web development alongside HTML and CSS.
+
+Features:
+Runs in the browser (client-side), but can also run on servers (like with Node.js)
+
+Used to manipulate HTML/CSS (DOM)
+
+Used in frameworks like React, Angular, Vue, etc.
+
+Can be enhanced by libraries like jQuery, Lodash, etc.
+
+
+Comparison Table
+
+Feature		JavaScript					Vanilla JavaScript
+Definition	The programming language itself			Plain JavaScript without any libraries
+Usage		Can be used with frameworks/libraries		Does not use any frameworks/libraries
+Example		$('#id').hide(); // jQuery			document.getElementById('id').style.display = 'none';
+Performance	Depends on framework/library			Often faster, no external code overhead
+Learning Curve	Can be easier with libraries			Can be harder at first (more verbose)
+File Size	Might include large libraries			No additional files, lightweight
+
+
+
+Using jQuery (JavaScript with library):
+$('#myDiv').hide();
+
+Using Vanilla JavaScript:
+document.getElementById('myDiv').style.display = 'none';
+
+
+When to use Vanilla JavaScript?
+For lightweight projects where you don’t need full frameworks
+When you want full control over the code
+To learn the core language features
+To improve performance (no external library loading)
+
+🔹 When to use JavaScript with Libraries/Frameworks?
+For large-scale applications
+To speed up development using ready-made solutions
+When you need better browser compatibility (older browsers)
+To follow modern development patterns like component-based architecture (React)
+
+So, technically Vanilla JavaScript is JavaScript, just without any extras like libraries (jQuery) or frameworks (React, Angular).
+
+
+
+What is a Single Page Application (SPA)?
+A SPA is a web app that loads a single HTML page and dynamically updates the content without refreshing the entire page. The key idea is:
+
+No full-page reloads
+Dynamic content rendering
+Smooth, app-like experience
+
+
+React--
+
+1.javascript library for building UI
+2.Extremely popular declarative, component based state driven javascript library for building UI, created by facebook.
+3.React is all about components which is building blocks of UI.
+4.combining of multiple components --> build a web application 
+5.we can reuse the same components over again and again
+6.so how the components looks like and how they work using a declarative syntax called JSX.
+7.what declarative is? telling React what a component looks like, based on current data/state.
+8.React is abstraction away from DOM: we never touch the DOM.
+9.JSX- a syntax that combines HTML,CSS, javascript as well as referencing other components . it is returned from components.
+
+
+state-driven
+------------------
+example: array of apartments is State --Render--> UI (components written with JSX)
+
+on click of button -->this event might change 
+
+
+on updation of state --> React will re-render the UI automatically --->this is reason why react called as a React in the first place
+
+
+React - library
+reason- because React is only the view layer. we need to pick multiple external libraries to build a complete application.
+for ex- for routing or for multiple data fetching
+
+complete frameworks built on top of react- Next.js or Remix
+
+
+React -- extremely popular
+React was created in 2011 by Jordan walke, an engineer working at facebook at that time. React was open sourced in 2013.
+
+
+
+extensions- eslint-->program automatically find error in code.
+		prettier--> formats our code
+		one monokai theme
+		material icon theme
+
+snippets- piece of code which speed up the developments
+
+
+2 options for setting up a react project
+
+create-react-app                 
+1. complete starter-kit for react applications.
+2.everything is already configured: ESLint,Prettier, Jest etc
+3.uses slow and outdated technologies(i.e webpack)
+
+dont use for real world app
+
+
+vite
+1.modern build tool that contains a template for setting up react applications.
+2.need to manually set up ESLint (and others)
+3.extremely fast hot module replacement (HMR) and bundling- reason : automatically referesh he page when the code changes which is what called hot module replacement
+
+use for modern real world apps
+
+
+what about react frameworks-
+
+next.js and Remix
+
+next.js contain solution for things like routing, data fetching and server side rendering.
+
+React-javascript library
+
+
+topics-
+destructuring,spread operator,tempate literals , ternaries
+promises async/await, map,filter,redure,sort
+
+	
+destructuring-
+
+we want specific data out of the array or an object.
+
+const book= getBook(2); //return book having id 2
+const title= book.title; just same line we get data from ourAPI
+
+
+object destructuring-
+
+const {title,author,genres}=book;  //title and author exactly the same name of api
+
+
+destructuring on array-
+
+const primaryGeneral = genres[0];
+const secondaryGeneral=genres[1];
+
+console.log(primaryGenrel,secon..);
+
+
+alternative-
+const [primarygenre,secondarygenre]=genres;
+
+
+Rest / spread operator-
+
+const [primaryGenre,...otherGenres]=genres; //rest operator
+console.log(primaryGenre,otherGenres);
+
+rest operator ex-
+
+Purpose: To collect multiple elements into a single array or object.
+
+Use case: Function parameters or destructuring.
+
+const { name, ...rest } = { name: "John", age: 30, city: "NY" };
+console.log(name); // John
+console.log(rest); // { age: 30, city: "NY" }
+
+spread operator-
+
+Purpose: To spread the elements of an array or object into individual elements.
+
+Use case: Array or object expansion.
+
+ex-
+Array-
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5];
+console.log(arr2); // [1, 2, 3, 4, 5]
+
+object-
+const obj1 = { a: 1, b: 2 };
+const obj2 = { ...obj1, c: 3 }; //...obj1 must be at first 
+console.log(obj2); // { a: 1, b: 2, c: 3 }
+
+
+const newGenres=[...genres,"epic fantasy"];//spread operator
+console.log(newGenres);
+
+
+🧠 Quick Summary:
+
+Operator	Looks Like	Purpose	Used In
+Rest	...	Collects values	Function args, destructuring
+Spread	...	Spreads values	Array/object literals, function calls
+
+
+ex-
+
+const updatedBook={
+...book,
+//adding a new property
+moviePublicationDate:"2001-12-19",
+
+//overwriting an existing property
+pages:1210
+}
+
+
+Template literals-
+
+
+const sum=`${title} a book`;
+console.log(sum)
+
+
+Ternary instead of if/else statement-
+
+const pagesRange = pages > 1000 ? "over a thousand" : "less than 1000";
+
+
+logical operators-
+
+short circuiting
+console.log(true && "some string")   //some string
+console.log(false && "some string")  //false
+
+
+console.log(true || "some string)  //true
+console.log(false || "some string")  //some string
+
+
+?? operator- nullish coalescing operator
+
+
+It returns the right-hand value only if the left-hand value is null or undefined.
+
+const result = value ?? fallback;
+
+This means:
+
+If value is not null or undefined, return value.
+If value is null or undefined, return fallback
+
+
+
+Optional chaining-
+
+Optional chaining allows you to safely access nested properties without getting an error if a part of the chain is null or undefined.
+
+const value = object?.property?.subProperty;
+
+If any part before .subProperty is null or undefined, it returns undefined instead of throwing an error.
+
+
+Calling functions conditionally:
+props.onClick?.();
+
+This will only call onClick if it exists.
+
+
+Array map() function-
+Used to transform each element in an array.
+
+const numbers = [1, 2, 3];
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6]
+
+
+const items = ['Apple', 'Banana', 'Orange'];
+
+return (
+  <ul>
+    {items.map((item, index) => (
+      <li key={index}>{item}</li>
+    ))}
+  </ul>
+);
+
+
+
+filter()-  Used to filter out items that don't meet a condition.
+
+const numbers = [1, 2, 3, 4];
+const even = numbers.filter(num => num % 2 === 0);
+console.log(even); // [2, 4]
+
+const users = [
+  { name: "John", isOnline: true },
+  { name: "Jane", isOnline: false },
+];
+
+const onlineUsers = users.filter(user => user.isOnline);
+
+return (
+  <div>
+    {onlineUsers.map(user => <p key={user.name}>{user.name}</p>)}
+  </div>
+);
+
+
+
+reduce()- Used to accumulate a value from array elements (sum, total, etc.)
+
+const numbers = [1, 2, 3, 4];
+const total = numbers.reduce((acc, curr) => acc + curr, 0);
+console.log(total); // 10
+
+const cart = [
+  { item: 'Shirt', price: 20 },
+  { item: 'Jeans', price: 40 },
+];
+
+const totalPrice = cart.reduce((sum, product) => sum + product.price, 0);
+console.log(totalPrice); // 60
+
+
+sort()- Used to sort elements in place (modifies original array).
+
+const numbers = [3, 1, 4, 2];
+numbers.sort((a, b) => a - b); // ascending
+console.log(numbers); // [1, 2, 3, 4]
+
+
+
+component lifecycle-
+------------------------
+
+the LIFECYCLE of a COMPONENT basically encompasses the different phases that a specific COMPONENT INSTANCE can go through over time.
+
+And the first phase in any COMPONENT'S LIFECYCLE is that a COMPONENT INSTANCE is MOUNTED. Which is also called the INITIAL RENDER. So this is when the COMPONENT is rendered
+for the very first time.
+
+This is also when fresh state and props are created for the COMPONENT INSTANCE.
+
+a COMPONENT will also be re-rendered when the props that it receives change, when its parent COMPONENT re-renders,
+or when something called CONTEXT changes.
+
+ the RE-RENDER Phase is actually optional, so it doesn't always happen in all COMPONENTS. So some COMPONENTS are only mounted and then unmounted, right away, which actually brings us to the next phase.
+
+unmount- the COMPONENT INSTANCE is completely destroyed and removed from the screen along with its state and props.
+
+
+why not to use fetch()?
+
+So we got some data from the API now showing up in our UI, but watch what happens when we check out the network tab. So you see that it's basically running an infinite number of requests here, so it keeps going and it never really stops.
+
+
+ex-
+fetch(url).then(res=>res.json()).then((data)=>setmovies(data.search));
+
+So every second our app is firing off multiple fetch requests to this API, which of course is a really, really bad idea.
+
+why?
+
+the reason is that setting the state here in the render logic will then immediately cause the component to re-render itself again.
+
+So as the state instead the component is re-rendered again which then will fetch again, which will set the movies again.
+
+And so this really is an infinite loop of state setting and then the component re-rendering. And so this is the reason why it is really not allowed to set state in render logic.
+
+
+setWatched() -- outside of the fetch()
+
+React will complain that there are too many renders, which means that we again entered that infinite loop where updating state will cause a component to re-render, which will cause the state to be set and so on into infinity.
+
+
+useEffect hook-
+----------------
+
+doesn't return anything - we passed function into it
+
+so this function is then called our effect, and it contains the code that we want to run as a side effect.
+
+second parameter- dependency array
+
+empty array - what you need to do here is to just pass in this empty array,
+which means that the effect that we just specified here will only run on mount.So it'll only run when this app component here renders for the very first time.
+
+
+a side effect is any interaction between a React component
+and a world outside that component. And we can think of a side effect as some code that actually makes something useful happen.For example, fetching data from some API. So what this means is that we actually need side effects all the time when we build React apps.
+
+side effect should not be in render logic
+
+
+unmounts in useEffect-
+------------------------
+each effect can return a so-called
+cleanup function, which is a function that will be called before the component re-renders or unmounts.
+
+in order to use an async function is to place the async keyword here, and then use await inside of it. However, we immediately get this warning from ESLint which tells us that effect callbacks are synchronous to prevent race conditions.
+
+
+So basically the effect function that we place into use effect cannot return a promise, which is what an async function does.
+
+So instead of doing it directly like this, we just create a new function. And then we place the async function in there.
+
+when we use fetch()-
+Now what I wanted to talk about
+is why we always have these two outputs.
+So, basically why we have these two requests here happening.
+Well, the reason for that is React's strict mode.
+So when strict mode is activated in React 18,
+our effects will not run only once, but actually twice.
+
+So React will call our effects twice
+but only in development.
+So when our application is in production,
+this will no longer be happening.
+
+
+if we remove React.strictmode - remove strictnode  from index.js , then only response we will get.
+
+
+dependency array-
+----------------------
+
+
+variables we pass in dependency array,
+So, the effect function depends on these variables
+to do its work,and therefore we need to tell React about them.
+Otherwise, if the title or the user rating changes,
+React will not know about this change,
+and, therefore, it won't be able to re-execute the effect code.And, this will then lead to a bug called stale closure.
+
+layout effect runs before the browser actually paints the new screen.
+
+useeffect cleanup function-
+--------------------------
+
+
+the cleanup function that we return from the effect is actually also executed on re-renders, so right before the next effect is executed again.
+
+
+the cleanup function will run on two occasions.
+First, it runs before the effect is executed again,
+in order to clean up the results of the previous side effect.
+
+It also runs right after the component instance has unmounted,
+in order to give us the opportunity to reset the side effect
+that we created, if that's necessary.
+
+
+you might be doing an HTTP request in your effect.
+Now if the component is re-rendered while the first request is still running, a new second request would be fired off, right?
+And so this might then create a bug called a race condition.
+
+And therefore it's a good idea to cancel the request
+in a cleanup function whenever the component re-renders
+or unmounts.
+
+
+effect actually only run after the browser paint while the rendor logic itself runs. well, during render.
+
+ex-
+useEffect(()=>{
+if (! title) return;
+document.title=`Movie | ${title}`;
+
+//cleanup
+return  function(){
+document.title="usepopcorn";
+}
+
+},[]);
+
+
+
+this function here runs only after the component
+has already disappeared from our componentry
+and so all the state including the movie object
+has been destroyed.
+But still our function here remembers the title.
+So how is that?
+Well, it's because of a very important concept
+in JavaScript called a closure.
+So basically a closure in JavaScript
+means that a function will always remember all the variables
+that were present at the time
+and the place data function was created.
+
+
+
+how hooks works?
+
+1.hooks only work if they are always called
+in the exact same order, which can only be insured
+if we only call them at the top level.
+
+2.hooks can only be called
+from function components or from custom hooks, but not from regular functions or even class components.these two rules are automatically enforced by React's ESLint rules.
+
+
+
+why hooks to be called in same order as they defined?
+
+1.whenever an application is rendered,React creates a tree of React elements,also called the virtual dom.
+
+2.On the initial render, React also builds a fiber tree out of the virtual dom, where each element is a fiber.
+
+3.each of these fibers contains a lot of stuff,like the received props, a list of work,and crucially for us, a linked list of all the hooks that were used in the component instance.
+
+
+
+ex- const [A,setA]=useState(23)
+
+if (A==23)
+	const [B,setB]=useState('')
+
+useEffect(funZ,[])
+
+
+in linked list of used hooks-
+
+1. state A
+2. state B
+3.effect Z 
+were called
+
+
+each are linked with other same as linked list
+
+
+just imagine if state A updated to 7 and get render
+then
+
+
+in this case , state B will not call because condition becomes false. as it updates to 7
+
+so state B would then no longer exist
+in this linked list of hooks after the render.
+
+
+
+the problem is that the first hook is still pointing
+to the original second hook, so to state B,
+but that link is now broken.
+So state A is now linking to a hook that no longer exists,
+and nothing is pointing to the effect of Z,
+meaning that a linked list has been destroyed.
+
+
+It works this way because fibers
+are not recreated on every render.
+And so this list is also not recreated.
+So if one of the hooks just disappears from the list,
+then the order of the list will get completely broken.
+
+So in conclusion, if we conditionally use the hook,
+like we did here, that will completely mess up the list
+of hooks between renders, which will leave React confused
+and unable to correctly track all the hooks that were used.
+And so this is the reason why hooks need to be called in the same order on every single render. And the only way in which we can assure that is by only calling hooks at the top level,
+which is exactly what the first rule of hooks says.
+
+
+
+
+ex-
+const [isTop,setIsTop]=useState(imdbRating>8);
+console.log(isTop);
+
+useEffect(
+()=>{
+setIsTop(imdbRating>8)
+},[])
+
+
+
+
+useState() hook-
+-----------------
+
+const [isTop,setIsTop]=useState(imdbRating>0);
+console.log(isTop);
+
+
+whatever we passed into useState is the initial state.
+react will only look at this initial state on the initial render.
+
+when the component first mounts.
+However, when the component first mounts here
+the IMDB rating will still be undefined.
+And so this year is then false.
+
+And so it will stay false forever
+because nowhere we update the state
+and on the second render,
+so when we then finally get the movie data,
+this will not be executed again.
+And so therefore, again, it will stay false forever.
+
+one way to fix this- useEffect
+
+useEffect(
+function(){
+setIsTop(imdbRating>8)
+},[imdbRating]
+)
+
+
+same can be happened using-
+derived state
+
+const isTop=imdbRatinf>8;
+console.log(isTop);
+
+
+
+one of the great advantages of derived state,
+which is that it updates
+basically as the component gets re-rendered.
+
+
+
+
+we will now use local storage to store this watched data information in the browser. So we're going to do this in two parts. First, each time that the watch list state is updated
+we will update the local storage. So we will store that data into local storage and then each time that the application loads so when the app component first mounts we will read that data from local storage and store it into the watched state.
+
+
+the second option is to simply do it in an effect.
+
+
+
+useState hook also accepts a callback function instead
+of just a single value. so we can then initialize the state
+with whatever value this callback function will return.
+
+
+And this function here actually needs to be a pure function and it cannot receive any arguments. So passing arguments here is not going to work. So just a very simple pure function that returns something and that something will be used by React
+as the initial state.
+
+So this function is only executed once on the initial render
+
+
+
+useState-
+
+1,creating state- 1.simple  
+const [count,setCount]=useState(23)
+                  2.based on function (lazy evaluation)
+const [count,setCount]=useState(()=>localstorage.getItem('count')
+);
+
+function must be pure and accept no arguments. called only on initial render.
+
+
+Lazy initialization in React typically refers to initializing a value only once and only when it's actually needed, which can improve performance — especially for expensive computations or large initial values.
+
+
+1. Using useState with Lazy Initialization
+When you pass a function to useState, React calls it only once on the initial render. This is useful for expensive computations.
+
+const [value, setValue] = useState(() => {
+  console.log("Initializing...");
+  return computeInitialValue(); // This runs only once
+});
+🔹 Without lazy init:
+
+const [value, setValue] = useState(computeInitialValue()); // runs on every render!
+
+2. Lazy Component Loading with React.lazy()
+Used for code-splitting to reduce initial bundle size:
+
+const LazyComponent = React.lazy(() => import('./MyComponent'));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <LazyComponent />
+    </React.Suspense>
+  );
+}
+3. Lazy Initialization in useRef or Custom Hooks
+Sometimes you need to initialize a ref with a value only once:
+
+const myRef = useRef(null);
+
+if (myRef.current === null) {
+  myRef.current = expensiveSetup(); // Lazy init
+}
+
+When to Use Lazy Initialization?
+✅ When the initial value is expensive to compute
+✅ When you want to avoid unnecessary re-computation
+✅ When loading components only when they are needed (for performance/code-splitting)
+
+2.updating state
+
+1. simple setCount(1000);
+2. based on current state 
+setCount((c)=>c+1)
+
+
+make sure to not mutate objects or arrays, but to replace them
+
+function must be pure and return next state
+
+
+purpose of ref come in react-
+-----------------------------
+
+
+
+ref (short for reference) comes into the picture when you need to directly interact with a DOM element or a React component instance — something that React normally abstracts away.
+
+
+Purpose of ref in React
+✅ 1. Accessing DOM elements directly
+Sometimes you need to read or manipulate a DOM node manually — for example:
+
+Focusing an input
+Measuring dimensions
+Scrolling a container
+
+import { useRef, useEffect } from 'react';
+
+function MyComponent() {
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus(); // Access the DOM node directly
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+
+
+2. Persisting values without causing re-renders
+useRef can store mutable values that don’t cause re-renders when changed.
+
+const countRef = useRef(0);
+
+function increment() {
+  countRef.current += 1;
+}
+
+
+Good for things like:
+
+Storing timers (setTimeout, setInterval)
+storing previous values
+Skipping initial render logic
+
+
+3. Interacting with child components (class-based)
+You can use ref to get access to a class component’s methods:
+
+class MyChild extends React.Component {
+  sayHello() {
+    alert("Hello from child!");
+  }
+}
+
+function Parent() {
+  const childRef = useRef();
+
+  return (
+    <>
+      <MyChild ref={childRef} />
+      <button onClick={() => childRef.current.sayHello()}>Say Hello</button>
+    </>
+  );
+}
+
+
+This only works with class components or components that use forwardRef.
+
+
+4. Forwarding refs to custom components
+You can't directly use ref on functional components — unless they forward it.
+
+const FancyInput = React.forwardRef((props, ref) => (
+  <input ref={ref} {...props} />
+));
+
+
+const inputRef = useRef();
+<FancyInput ref={inputRef} />;
+
+
+
+
+so what is ref?
+ref stands for reference.
+it's like a box into which we can put any data that we want to be preserved between renders.
+
+when we use useRef,
+
+React will give us an object with a mutable current property, and we can then write any data into this current property and, of course, also read from it.
+
+myRef.current=23;
+
+we can write to and read from the ref using .current
+
+their current property value stays the same between multiple renders.
+
+this gives us two big use cases for refs. First, as we just said, we can use refs to create variables that will stay the same between renders. And useful examples of this are preserving the previous state or storing the ID of a setTimeout function. Now the second use case is actually far more important, which is to select and store DOM elements.
+
+
+So usually refs only appear in event handlers or effects, not in jsx.
+
+state vs ref -- unsynchronous updates
+state is immutable, but refs are not. Also state is updated asynchronously, which means that we cannot use the new state
+immediately after updating it; with refs, on the other hand, updates are not asynchronous, and so we can actually read a new current property immediately after updating it.
+
+
+in order to use ref in useeffect hook-
+----------------------------------------
+
+So we need to use an effect in order to use a ref that contains a DOM element like this one because the ref only gets added to this DOM element here after the DOM has already loaded. And so therefore we can only access it in effect
+which also runs after the DOM has been loaded.
+
+
+So this is the perfect place for using a ref that contains a DOM element.
+
+
+In class component-
+-----------------
+
+
+render() method is equivalent to function body of the functional component.
+
+ 
+difference between functional and class component-
+------------------------------------------------------
+
+
+Type				Description
+Functional Component		A plain JavaScript function 				that returns JSX
+Class Component			An ES6 class that extends 				React.Component and uses 				render() method
+
+
+| Feature              | Functional Component | Class Component              |
+| -------------------- | -------------------- | ---------------------------- |
+| Syntax               | Function             | Class                        |
+| `this` keyword       | ❌ Not needed         | ✅ Required                   |
+| State                | ✅ `useState()`       | ✅ `this.state`, `setState()` |
+| Lifecycle methods    | ✅ via `useEffect()`  | ✅ `componentDidMount`, etc.  |
+| Code simplicity      | ✅ Simple and clean   | ❌ More boilerplate           |
+| Performance (minor)  | ✅ Slightly better    | ❌ Slightly heavier           |
+| Hooks support        | ✅ Fully supported    | ❌ Not supported              |
+| Readability          | ✅ Easier to read     | ❌ Verbose                    |
+| Best practice (2025) | ✅ Preferred          | ❌ Deprecated (not removed)   |
+
+
+| Lifecycle Event | Functional (with Hooks)      | Class Component          |
+| --------------- | ---------------------------- | ------------------------ |
+| Mount           | `useEffect(..., [])`         | `componentDidMount()`    |
+| Update          | `useEffect(..., [state])`    | `componentDidUpdate()`   |
+| Unmount         | `useEffect` cleanup function | `componentWillUnmount()` |
+
+
+| Use Case                              | Recommended            |
+| ------------------------------------- | ---------------------- |
+| New Projects                          | Functional             |
+| Simple components                     | Functional             |
+| You want to use hooks                 | Functional             |
+| Working with legacy code              | Class may be necessary |
+| Complex lifecycle handling (old code) | Class may exist        |
+
+
+
+
+useReducer hook-
+---------------------------
+
+ usereducer hook is basically a more advanced and more complex way of managing state instead of the usestate hook. Now the usereducer hook works with a so-called reducer function, which is a pure function that will always take in the previous state and the so-called action as an argument and will then return the next state.
+
+
+ex-
+
+function reducer(state,action){
+	console.log(state,action);    //action return the next state
+}
+
+
+const [count,dispatch]=useReducer(reducer,0);  //takes a reducer function
+
+
+const inc=function(){
+	dispatch(1)
+
+}
+
+
+output-
+0 1
+
+
+ex-
+
+const Inc=function(){
+	dispatch({type:'Inc',payload: 1});
+}
+
+
+const dec=function(){
+	dispatch({type:'dec',payload: -1});
+}
+
+const defineCount = function(e){
+	dispatch({type:'setCount',payload:Number(e.target.value)});
+}
+
+
+function reducer(state,action){
+	console.log(state,action);    //action return the next state
+if(action.type==="Inc") return state+action.payload;
+if(action.type==="dec") return state-action.payload;
+if(action.type==="setCount") return action.payload;
+
+}
+
+in useReducer-
+So not just one single value as we have been doing here. So what this means is that usually the state is going to be an object and not just one single value.
+
+
+
+what exactly useReducer is-
+
+const [state,dispatch]=useReducer(reducer,initialState);
+
+it returns an array containing the current state and a dispatch function.
+
+Dispatch Function is used to send actions to the reducer, which in turn updates the state based on action type and any associated data (payload).
+
+
+Reducer function - function that takes the current state and action arguments and returns a new state
+
+Initial state: the initial state value. (the initial state can be a simple value, an object or even derived from a function if the initialization is complex).
+
+The useReducer hook in React is an alternative to useState for managing complex state logic in functional components. It’s especially useful when:
+
+The state has multiple sub-values (e.g., nested objects).
+State transitions depend on previous state values.
+You want to centralize state update logic (like a mini Redux in a component).
+
+
+reducer is a pure function
+
+action is an object that contains information for the reducer.
+
+
+
+
+
+
+
+

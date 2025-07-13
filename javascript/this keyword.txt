@@ -1,0 +1,110 @@
+ 1. Global Scope
+
+console.log(this); 
+✅ In a browser: this refers to the window object.
+✅ In Node.js: this refers to an empty object or module.exports.
+
+🔹 2. Inside a Regular Function
+
+function show() {
+  console.log(this);
+}
+show();
+✅ In non-strict mode, this refers to the global object (window in browsers).
+✅ In strict mode, this is undefined.
+
+🔹 3. Inside a Method (Object Function)
+
+const person = {
+  name: 'Anshuja',
+  greet() {
+    console.log(this.name);
+  }
+};
+person.greet(); // 'Anshuja'
+✅ Here, this refers to the object calling the method, i.e., person.
+
+🔹 4. Inside an Arrow Function
+
+
+const person = {
+  name: 'Anshuja',
+  greet: () => {
+    console.log(this.name);
+  }
+};
+person.greet(); // undefined
+⛔ Arrow functions do not have their own this.
+✅ They inherit this from the lexical (surrounding) scope.
+
+🔹 5. Inside a Constructor Function
+
+
+function Car(brand) {
+  this.brand = brand;
+}
+const myCar = new Car('Tata');
+console.log(myCar.brand); // Tata
+✅ this refers to the newly created object.
+
+🔹 6. Using call(), apply(), bind()
+
+
+function sayHello() {
+  console.log(this.name);
+}
+
+const user = { name: 'Anshuja' };
+
+sayHello.call(user);  // Anshuja
+sayHello.apply(user); // Anshuja
+const hello = sayHello.bind(user);
+hello();              // Anshuja
+✅ These methods manually set the value of this.
+
+🔹 7. In Event Listeners
+
+document.getElementById("btn").addEventListener("click", function() {
+  console.log(this); // refers to the button
+});
+✅ In regular functions, this refers to the element that triggered the event.
+
+❗ But with arrow functions:
+
+
+document.getElementById("btn").addEventListener("click", () => {
+  console.log(this); // refers to outer scope (usually window)
+});
+
+🔹 8. In setTimeout
+
+const obj = {
+  name: 'Anshuja',
+  sayName() {
+    setTimeout(function() {
+      console.log(this.name); // undefined
+    }, 1000);
+  }
+};
+obj.sayName();
+⛔ Regular function: this refers to global object
+
+✅ Fix with arrow function:
+
+
+setTimeout(() => {
+  console.log(this.name); // Anshuja
+}, 1000);
+
+🧠 Summary Table
+Context				What this refers to
+Global Scope			Global object (window or global)
+Regular function		Global object (or undefined in strict mode)
+Method in object		The object itself
+Arrow function			Lexical scope (this from outer function)
+Constructor function		New instance created by new
+call, apply, bind		The object passed as the first argument
+Event handler (regular)		The DOM element
+Event handler (arrow)		Inherits from outer scope
+setTimeout (regular)		Global object
+setTimeout (arrow)		Lexical scope (this from outer function)

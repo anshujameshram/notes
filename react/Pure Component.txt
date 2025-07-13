@@ -1,0 +1,118 @@
+What is a Pure Component?
+In React, a Pure Component is a component that renders the same output for the same props and state.
+It avoids unnecessary re-renders by implementing a shallow comparison of props and state.
+
+
+ Think of it like this:
+A pure function always returns the same output for the same input and has no side effects.
+Similarly, a PureComponent only re-renders when its props or state actually change.
+
+How to Create a Pure Component
+1. Using Class Components
+React provides a built-in class for pure components:
+
+
+import React, { PureComponent } from 'react';
+
+class MyComponent extends PureComponent {
+  render() {
+    return <div>{this.props.name}</div>;
+  }
+}
+2. Using Functional Components + React.memo
+
+const MyComponent = React.memo(function MyComponent({ name }) {
+  return <div>{name}</div>;
+});
+
+
+What Does React Do Internally?
+
+Pure Components automatically:
+Implement shouldComponentUpdate() with shallow comparison:
+
+
+shouldComponentUpdate(nextProps, nextState) {
+  return (
+    nextProps !== this.props ||
+    nextState !== this.state
+  );
+}
+
+Shallow Comparison Rules
+---------------------------
+Shallow comparison checks:
+-----------------------------
+Primitive types: compared by value (e.g., 1 === 1, 'a' === 'a')
+
+Objects and arrays: compared by reference (a === b means same reference)
+
+So:
+
+
+{ name: 'Alice' } !== { name: 'Alice' } // true – different objects!
+🧪 Example: Why Pure Component Helps
+
+const User = React.memo(({ name }) => {
+  console.log("Rendering", name);
+  return <div>{name}</div>;
+});
+
+function App() {
+  const [count, setCount] = React.useState(0);
+  return (
+    <>
+      <User name="Alice" />
+      <button onClick={() => setCount(count + 1)}>Click</button>
+    </>
+  );
+}
+Without React.memo, User re-renders every time App updates.
+
+With React.memo, User only re-renders if name changes.
+
+
+Rules for Pure Component Render Logic
+----------------------------
+
+| Rule                                    | Explanation                                                                                      |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 1. **Props/state must be immutable**    | Modify by creating a new object/array, not mutating the old one.                                 |
+| 2. **Avoid anonymous functions in JSX** | They create a new function on every render.                                                      |
+| 3. **Use stable keys in lists**         | Helps React optimize rendering.                                                                  |
+| 4. **Lift state up if needed**          | Helps control re-render scope.                                                                   |
+| 5. **Don’t rely on deep nested props**  | Shallow comparison won’t detect changes inside nested structures unless their references change. |
+| 6. **Use `useCallback` and `useMemo`**  | To memoize functions and computed values passed to pure components.                              |
+
+
+🚫 When Not to Use PureComponent
+------------------
+If the component always needs to re-render (e.g., animations, dynamic calculations).
+
+If the props are deeply nested and you’re not using a proper immutability strategy.
+
+If performance isn't an issue – premature optimization can add complexity.
+
+✅ When to Use PureComponent / React.memo
+----------------------------------------
+Component receives the same props often.
+
+Large lists or expensive rendering logic.
+
+Optimizing performance in large applications.
+
+
+summary
+| Concept        | Pure Component                                             |
+| -------------- | ---------------------------------------------------------- |
+| Purpose        | Avoid unnecessary re-renders                               |
+| Implementation | `React.PureComponent` (class) or `React.memo` (function)   |
+| How it works   | Shallow comparison of props and state                      |
+| Benefits       | Better performance, cleaner logic                          |
+| Risks          | Might skip updates if immutability isn’t followed properly |
+
+
+
+
+
+

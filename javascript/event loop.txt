@@ -1,0 +1,180 @@
+call stack is present inside the javascript engine.
+
+example-
+
+
+JavaScript is single-threaded, meaning only one task can run at a time — using something called the Call Stack.
+
+But what about setTimeout and other delayed or asynchronous operations?
+That’s where the Event Loop and Web APIs come in.
+
+console.log("start");
+
+setTimeout(function cb() {
+  console.log("timer");
+}, 5000);
+
+console.log("end");
+
+
+
+Step-by-Step Breakdown
+✅ 1. Global Execution Context (GEC) is Created
+Your code starts executing top to bottom.
+
+console.log("start") is added to the Call Stack and executed.
+
+Output: start
+
+✅ 2. setTimeout(cb, 5000) is Encountered
+setTimeout is NOT part of JS itself — it’s a Web API provided by the browser.
+
+What happens here:
+
+cb (the callback function) is sent to the Web API Timer.
+
+A 5-second timer starts.
+
+Meanwhile, JS does NOT wait. It moves to the next line.
+
+✅ 3. console.log("end")
+Added to the Call Stack, executed.
+
+Output: end
+
+✅ 4. After 5 Seconds: cb() is ready
+Timer expires.
+
+cb() is moved to the Callback Queue (a waiting line).
+
+✅ 5. Event Loop’s Job Begins
+Event loop checks:
+
+Is the Call Stack empty?
+
+If YES, it pushes cb() from the Callback Queue to the Call Stack.
+
+Now cb() runs and logs:
+
+Output: timer
+
+
+| Component          | Role                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **Call Stack**     | Where JS code is executed. One task at a time.                          |
+| **Web APIs**       | Browser-provided tools (`setTimeout`, DOM, fetch API,localstorage, etc.)                 |
+| **Callback Queue** | Holds finished async callbacks until the Call Stack is free.            |
+| **Event Loop**     | Middleman that moves ready callbacks to the Call Stack when it's empty. |
+
+
+output-
+start
+end
+(timer logs after ~5 sec)
+timer
+
+
+In Short:
+The Event Loop continuously checks if the Call Stack is empty, and if so, moves the first function from the Callback Queue into the Call Stack for execution.
+
+
+
+2. example-
+
+console.log("Start");
+
+document.getElementById("btn").addEventListener("click", function cb() {
+  console.log("Callback");
+});
+
+console.log("End");
+
+
+Step-by-Step Explanation:
+🟩 Step 1: Global Execution Context (GEC) Created
+When the script runs, JavaScript creates a Global Execution Context, and starts executing top-down.
+
+🟩 Step 2: console.log("Start")
+This goes into the Call Stack
+
+Executes immediately
+
+🖨 Output: Start
+
+Then it's popped off the stack
+
+🟩 Step 3: Event Listener Setup
+
+document.getElementById("btn").addEventListener("click", function cb() { ... });
+This line registers a callback (cb) with the Web API environment (handled by the browser).
+
+It does not execute the callback now.
+
+It says:
+
+"Hey browser, if the user clicks this btn element, please call this cb function."
+
+This is event listener registration, not execution.
+
+So:
+
+Nothing goes to call stack yet
+
+The browser stores:
+
+Element btn
+
+Event click
+
+Callback cb
+
+🟩 Step 4: console.log("End")
+Added to the call stack
+
+Executes immediately
+
+🖨 Output: End
+
+Then removed from the stack
+
+📤 Step 5: GEC is Done
+The Global Execution Context is now popped from the call stack.
+
+But the click event listener remains alive in the Web API environment.
+
+Why? Because you might click the button at any time.
+
+🟨 Step 6: User Clicks the Button Later
+Browser detects the click on #btn
+
+It moves the registered callback cb() into the Callback Queue
+
+The Event Loop checks:
+
+"Is the Call Stack empty?"
+
+✅ Yes (we're idle now)
+
+So it pushes cb() into the Call Stack
+
+🟦 Step 7: Callback Executes
+
+console.log("Callback");
+Callback function runs inside call stack
+
+🖨 Output: Callback
+
+🧠 Summary of the Components
+Component	Role
+Call Stack	Executes synchronous code
+Web API		Stores registered events & timers (e.g., addEventListener)
+Callback Queue	Holds event callbacks (e.g., from click, timer) until ready to run
+Event Loop	Moves callbacks from the queue to the stack when it's empty
+
+🖨 Final Output in Console:
+
+Start
+End
+(Click happens later...)
+Callback
+

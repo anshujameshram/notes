@@ -1,0 +1,56 @@
+promises can be thought of as either eager or lazy, depending on when the asynchronous operation starts.
+
+Eager Promises
+----------------
+Definition: The code inside a promise executes immediately upon creation.
+
+Default behavior of JavaScript promises.
+
+
+
+ex-
+
+const promise = new Promise((resolve, reject) => {
+  console.log("Executing...");
+  setTimeout(() => resolve("Done!"), 1000);
+});
+
+
+
+🔸 The "Executing..." log appears immediately, even if you don’t call .then() on the promise.
+🔸 This is because new Promise() starts running the executor function right away.
+
+
+Lazy Promises
+-----------------
+Definition: The promise doesn’t start executing until you explicitly trigger it.
+
+Requires custom logic to delay execution.
+
+Typically implemented using a function that returns a promise.
+
+
+ex-
+
+const lazyPromise = () => {
+  return new Promise((resolve, reject) => {
+    console.log("Executing...");
+    setTimeout(() => resolve("Done!"), 1000);
+  });
+};
+
+// Nothing happens until you call:
+lazyPromise().then(result => console.log(result));
+
+
+🔸 Here, nothing logs until lazyPromise() is called — making it lazy.
+
+
+| Type      | Starts Execution         | Use Case                              |
+| --------- | ------------------------ | ------------------------------------- |
+| **Eager** | Immediately when created | When the task should begin right away |
+| **Lazy**  | Only when invoked        | When you want to defer execution      |
+
+
+
+

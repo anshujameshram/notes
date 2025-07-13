@@ -1,0 +1,1873 @@
+In React, controlled and uncontrolled elements refer to how form data is managed.
+✅ Controlled Components
+React controls the value of the input through state.
+
+You use useState (or this.state in class components).
+The input’s value is always determined by React.
+Example:
+import { useState } from 'react';
+function ControlledForm() {
+  const [name, setName] = useState('');
+  return (
+    <input type="text"value={name} onChange={(e) => setName(e.target.value)}
+    />
+  );
+}
+
+🔍 Characteristics:
+One-way data binding: React → Input
+Easier to validate or manipulate input values
+Better suited for form submissions or complex forms
+
+
+🚫 Uncontrolled Components
+The DOM controls the input value.
+You access the value using a ref (reference to the DOM element).
+React does not track changes to the value.
+
+Example:
+import { useRef } from 'react';
+
+function UncontrolledForm() {
+  const inputRef = useRef();
+  const handleSubmit = () => {
+    alert(inputRef.current.value);
+  };
+  return (
+    <><input type="text" ref={inputRef} />
+      <button onClick={handleSubmit}>Submit</button>
+    </>  );
+}
+🔍 Characteristics:
+Useful for simple forms or when integrating with non-React code
+Harder to validate or keep in sync with app state
+
+🆚 Summary Table:
+Feature			Controlled			Uncontrolled
+State management	React (useState)		DOM (useRef)
+Value source		React state			DOM input value
+Validation		Easier and inline with React	Manual via ref
+Use case		Complex forms, validation	Simple inputs, quick scripts
+ 
+Do you want to know when to use one over the other in a real-world scenario?
+ 
+Derived State in React
+-------------------------
+Derived state refers to state that is computed from other state or props, rather than being directly stored and updated.
+
+📌 Why Avoid Storing Derived State?
+Storing derived values in state can lead to:
+Inconsistency if not properly synced
+Redundant updates and complexity
+ 
+Derived state is not stored directly in React — instead, it is calculated from other data like props or state.
+
+example- ageInMonths = age * 12
+
+ex2-
+
+function Welcome({ firstName, lastName }) {
+  const fullName = firstName + ' ' + lastName; // this is derived state
+
+  return <h1>Hello, {fullName}</h1>;
+}
+
+
+ Spread Operator (...)
+💬 Purpose:
+To spread or unpack values from an array or object — into a new array, object, or function arguments.
+
+🔹 1. Spread in Arrays
+📌 Example 1: Copying an array
+
+const original = [1, 2, 3];
+const copy = [...original];
+console.log(copy); // [1, 2, 3]
+
+➡ This creates a new array. It’s like cloning — changing copy won’t affect original.
+
+📌 Example 2: Combining arrays
+
+const a = [1, 2];
+const b = [3, 4];
+
+const combined = [...a, ...b];
+console.log(combined); // [1, 2, 3, 4]
+
+🔹 2. Spread in Objects
+📌 Example: Copying and adding properties
+
+const obj1 = { x: 10, y: 20 };
+const obj2 = { ...obj1, z: 30 };
+console.log(obj2); // { x: 10, y: 20, z: 30 }
+
+✅ Use this to clone objects or merge multiple objects.
+
+🔹 3. Spread in Function Calls
+📌 Example:
+
+const numbers = [5, 10, 15];
+console.log(Math.max(...numbers)); // 15
+
+✅ ...numbers breaks the array into individual arguments like Math.max(5, 10, 15)
+
+⚠️ Caution: Spread creates a shallow copy, not deep
+
+const obj = { a: 1, nested: { b: 2 } };
+const copy = { ...obj };
+copy.nested.b = 5;
+console.log(obj.nested.b); // 5 (it changed!)
+
+Use libraries like lodash or custom deep clone functions for nested structures.
+
+🌀 Rest Operator (...)
+💬 Purpose:
+To gather multiple elements into an array or object — usually in function parameters or destructuring.
+
+🔹 1. Rest in Functions (Variable arguments)
+📌 Example:
+
+function add(...nums) {
+  return nums.reduce((sum, val) => sum + val, 0);
+}
+console.log(add(1, 2, 3, 4)); // 10
+✅ Here, ...nums collects all arguments into an array: [1, 2, 3, 4].
+
+🔹 2. Rest in Array Destructuring
+📌 Example:
+
+const [first, ...others] = [10, 20, 30, 40];
+console.log(first);  // 10
+console.log(others); // [20, 30, 40]
+
+🔹 3. Rest in Object Destructuring
+📌 Example:
+
+const { name, ...rest } = { name: 'John', age: 25, city: 'Pune' };
+console.log(name); // John
+console.log(rest); // { age: 25, city: 'Pune' }
+
+🧠 How to Tell the Difference?
+Context						... acts as		Meaning
+Right side (e.g. [...arr], {...obj})		Spread			Expands values
+Function parameter (e.g. function(...args))	Rest			Collects values into array
+Destructuring (e.g. const [a, ...b] = arr)	Rest			Captures remaining items
+
+
+ 
+Operator		Position	Valid?	Example
+Spread			Start		✅	[...arr, 4]
+			Middle		✅	[1, ...arr, 4]
+			End		✅	[1, 2, ...arr]
+Rest			Start		❌	function(...args, last) ❌
+			Middle		❌	function(a, ...rest, b) ❌
+			End		✅	function(a, b, ...rest) ✅
+
+🔹 var, let, and const: Overview
+Feature				var			let			const
+Scope				Function-scoped		Block-scoped ({})	Block-scoped ({})
+Reassignable			✅ Yes			✅ Yes			❌ No (constant reference)
+Redeclarable			✅ Yes			❌ No			❌ No
+Hoisted				✅ Yes (initialized as undefined)	✅ Yes (but not initialized)	✅ Yes (but not initialized)
+Temporal Dead Zone		❌ No			✅ Yes			✅ Yes
+
+
+1. var – Function Scoped
+js
+Copy
+Edit
+function testVar() {
+  if (true) {
+    var a = 10;
+  }
+  console.log(a); // 10 (accessible outside the block)
+}
+testVar();
+var is accessible outside the block it's defined in (inside the same function).
+
+Redeclaring a var variable does not throw an error.
+
+js
+Copy
+Edit
+var x = 1;
+var x = 2; // ✅ No error
+✅ 2. let – Block Scoped
+js
+Copy
+Edit
+function testLet() {
+  if (true) {
+    let b = 20;
+    console.log(b); // 20
+  }
+  // console.log(b); // ❌ ReferenceError: b is not defined
+}
+testLet();
+let is not accessible outside the block {} it's declared in.
+
+Redeclaring let in the same scope throws an error.
+
+js
+Copy
+Edit
+let y = 5;
+// let y = 10; // ❌ SyntaxError
+✅ 3. const – Block Scoped + Constant
+js
+Copy
+Edit
+const z = 30;
+z = 40; // ❌ TypeError: Assignment to constant variable
+const cannot be reassigned.
+
+But: for objects and arrays, their contents can still change.
+
+js
+Copy
+Edit
+const person = { name: "John" };
+person.name = "Jane"; // ✅ Allowed
+
+
+Hoisting-
+Hoisting is JavaScript’s behavior of moving variable and function declarations to the top of their scope before code execution.
+
+var is hoisted (but value is undefined)
+
+ex-
+console.log(a); // undefined
+var a = 10;
+
+🔸 This behaves like:
+
+var a;        // declaration hoisted
+console.log(a); // undefined
+a = 10;       // assignment happens here
+
+let and const are hoisted too — BUT in Temporal Dead Zone (TDZ)
+
+console.log(b); // ❌ ReferenceError
+let b = 10;
+Even though b is hoisted, it cannot be accessed before declaration — that's the TDZ.
+
+Same with const:
+
+console.log(c); // ❌ ReferenceError
+const c = 20;
+
+
+What is TDZ (Temporal Dead Zone) in JavaScript?
+Temporal Dead Zone (TDZ) is the time between when a variable is hoisted and when it is actually declared (initialized) — during this time, accessing the variable results in a ReferenceError.
+
+🔑 In Simple Words:
+TDZ is the phase after a block starts but before the let or const variable is declared — where the variable exists, but cannot be accessed.
+
+🔹 Example of TDZ:
+{
+  console.log(a); // ❌ ReferenceError: Cannot access 'a' before initialization
+  let a = 5;
+}
+The variable a is hoisted but not initialized.
+
+So during the TDZ (from block start { to let a = 5), you can't access a.
+
+🔹 Example with var (No TDZ):
+
+{
+  console.log(b); // ✅ undefined (no error)
+  var b = 10;
+}
+var is hoisted and initialized to undefined, so there is no TDZ.
+
+🔹 Real-world use case:
+
+function greet() {
+  if (true) {
+    // TDZ starts here for `name`
+    // console.log(name); // ❌ ReferenceError
+    let name = "Alice"; // TDZ ends here
+    console.log(name);  // ✅ Alice
+  }
+}
+greet();
+❗ Why does TDZ exist?
+TDZ helps catch errors and enforce good coding practices. Without it:
+
+You might read a variable before it's properly initialized.
+
+It helps avoid unexpected undefined values like with var.
+
+✅ Rule to Avoid TDZ:
+Always declare variables (let / const) at the top of their block, before you use them.
+
+
+strict mode-
+Strict mode is a special mode in JavaScript that makes your code more secure, clean, and less error-prone by enforcing stricter parsing and error handling.
+
+Why use "use strict"?
+Strict mode:
+
+Prevents accidental bugs
+Disallows unsafe actions
+Makes debugging easier
+
+
+❌ Using undeclared variables
+
+"use strict";
+x = 10; // ❌ ReferenceError: x is not defined
+
+Behavior				Without "use strict"		With "use strict"
+🛑 Undeclared Variables			Allowed (automatic global)	❌ Throws an error
+🛑 Duplicate Function Parameters	Allowed				❌ Throws an error
+🛑 Assignment to Read-only Properties	Allowed				❌ Throws an error
+🛑 this in Global Functions		Refers to global object (window)	this is undefined
+🛑 Use of with Statement		Allowed				❌ Throws an error
+🛑 Global eval Variables		Allowed				Creates new variables only inside eval()
+🛑 Delete Variables		Allowed					❌ Throws an error
+
+
+note-
+It doesn’t apply automatically — you must write "use strict" explicitly.
+Many modern tools like ES6 modules or TypeScript use strict mode by default.
+
+
+ What Are Queues in JavaScript?
+JavaScript runs in a single-threaded environment — one thing happens at a time. So, to manage async operations (like setTimeout, promises, etc.), JavaScript uses queues and the event loop.
+
+There are mainly two types of queues:
+
+Macrotask Queue (a.k.a. Task Queue)
+Microtask Queue (a.k.a. Job Queue)
+
+The Event Loop
+-------------------
+The event loop is the mechanism that:
+
+Picks one task from the Call Stack (main execution).
+Executes all microtasks after that.
+Then moves on to the next macrotask.
+Repeats forever.
+
+Macrotask → All Microtasks → Next Macrotask → All Microtasks → ...
+
+1. Macrotask Queue / callback queue
+Macrotasks include:
+
+setTimeout()
+setInterval()
+setImmediate() (Node.js)
+DOM Events
+Ajax callbacks
+UI rendering
+
+🧪 Example:
+
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Macrotask - setTimeout");
+}, 0);
+
+console.log("End");
+🧾 Output:
+
+Start
+End
+Macrotask - setTimeout
+
+The setTimeout goes into the macrotask queue and runs after the current execution and all microtasks.
+
+🔷 2. Microtask Queue
+Microtasks include:
+
+Promise.then(), catch(), finally()
+queueMicrotask() (manual microtask)
+MutationObserver (DOM change tracking)
+
+🧪 Example:
+
+console.log("Start");
+
+Promise.resolve().then(() => {
+  console.log("Microtask - Promise");
+});
+
+setTimeout(() => {
+  console.log("Macrotask - setTimeout");
+}, 0);
+
+console.log("End");
+🧾 Output:
+
+Start
+End
+Microtask - Promise
+Macrotask - setTimeout
+
+Even though setTimeout is set for 0ms, promises run first because microtasks run after every synchronous task before any macrotask.
+
+🔄 Full Flow Example:
+
+console.log("script start");
+
+setTimeout(() => {
+  console.log("setTimeout");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("promise1");
+}).then(() => {
+  console.log("promise2");
+});
+
+console.log("script end");
+🧾 Output:
+
+script start
+script end
+promise1
+promise2
+setTimeout
+
+🧠 Why?
+script start & script end: synchronous
+promise1 & promise2: microtasks
+setTimeout: microtask
+
+Summary
+JavaScript uses task queues to handle async operations.
+Microtasks have higher priority than macrotasks.
+After every macrotask, all microtasks are processed before the next macrotask.
+Understanding this helps avoid unexpected behavior in asynchronous code.
+
+
+
+what is event loop
+
+
+ChatGPT said:
+The event loop is the heart of JavaScript’s concurrency model. It allows JavaScript (which is single-threaded) to handle asynchronous operations like timers, user input, API calls, and promises without blocking the main thread.
+
+🧠 In Simple Words:
+The event loop continuously checks:
+
+Is the call stack empty?
+
+Are there tasks (macrotasks or microtasks) waiting to run?
+
+If yes, it pushes the next task into the call stack for execution.
+
+🔁 How the Event Loop Works (Step-by-Step):
+🟢 Runs synchronous code (line-by-line).
+
+🔵 Handles microtasks (e.g., .then(), queueMicrotask()).
+
+🔴 Runs one macrotask (e.g., setTimeout, events).
+
+🔁 Repeats steps 2–3 forever.
+
+🔄 Diagram Overview
+
+Call Stack    ─────────► Executes one thing at a time
+                ▲
+                │
+          Event Loop ─► Checks queues continuously
+                │
+     ┌──────────┴──────────┐
+     ▼                     ▼
+Microtask Queue       Macrotask Queue
+(Promise, etc.)       (setTimeout, etc.)
+🧪 Example:
+console.log('Start');
+
+setTimeout(() => {
+  console.log('Macrotask');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Microtask');
+});
+
+console.log('End');
+🧾 Output:
+Start
+End
+Microtask
+Macrotask
+
+✅ Why?
+Start and End are synchronous.
+
+Promise.then is a microtask → runs before setTimeout.
+
+setTimeout is a macrotask → runs last.
+
+🧠 Why Is the Event Loop Important?
+Makes non-blocking I/O possible.
+
+Helps UI stay responsive in the browser.
+
+Enables features like async/await, Promises, and setTimeout.
+
+
+Curring-
+---------
+
+Currying is a technique in functional programming where a function with multiple arguments is transformed into a sequence of functions,
+ each taking a single argument.
+
+ex-
+
+Instead of:
+
+function add(a, b) {
+  return a + b;
+}
+You curry it like:
+
+function add(a) {
+  return function(b) {
+    return a + b;
+  };
+}
+Now you can use it like:
+
+const add5 = add(5);  // returns a function
+console.log(add5(3)); // 8
+
+✅ Why Use Currying?
+Reusability: Create specialized functions easily.
+Readability: Express logic more clearly.
+Function Composition: Works well with other functional techniques.
+
+ex-
+Original Function
+
+function multiply(a, b, c) {
+  return a * b * c;
+}
+
+Curried Version
+
+function curriedMultiply(a) {
+  return function(b) {
+    return function(c) {
+      return a * b * c;
+    };
+  };
+}
+
+console.log(curriedMultiply(2)(3)(4)); // 24
+
+ex-
+Currying with ES6 Arrow Functions
+
+const curriedMultiply = a => b => c => a * b * c;
+
+console.log(curriedMultiply(2)(3)(4)); // 24
+
+
+Concept		Meaning
+Currying	Transform a function of n arguments → n functions of 1 arg each
+Syntax		f(a)(b)(c) instead of f(a, b, c)
+Benefits	Reusability, clarity, functional chaining
+
+
+ex-
+Currying vs Partial Application
+Currying: Breaks function into a chain of 1-arg functions.
+
+Partial Application: Fixes some arguments of a function and returns a new function.
+
+// Partial Application
+function multiply(a, b) {
+  return a * b;
+}
+
+const double = multiply.bind(null, 2);
+console.log(double(5)); // 10
+
+
+ex-
+function sum(a, b, c) {
+  return a + b + c;
+}
+
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    } else {
+      return function(...nextArgs) {
+        return curried.apply(this, args.concat(nextArgs));
+      };
+    }
+  };
+}
+
+const curriedSum = curry(sum);
+
+You pass sum into curry.
+curry returns a new function (curriedSum) that allows you to pass arguments one-by-one (or in groups).
+
+console.log(curriedSum(1)(2)(3));     // 6
+console.log(curriedSum(1, 2)(3));     // 6
+console.log(curriedSum(1)(2, 3));     // 6
+
+High order function-
+---------------------
+A Higher-Order Function (HOF) is a function that either:
+Takes one or more functions as arguments, or
+Returns a function as its result
+👉 In short, functions that work with other functions.
+
+Why are they useful?
+JavaScript treats functions as first-class citizens — you can pass them around like values (variables, parameters, return values).
+This makes HOFs possible and very powerful for abstraction, composition, and reusability.
+
+Examples of Higher-Order Functions
+1. setTimeout (takes a function as an argument)
+js
+Copy
+Edit
+setTimeout(() => {
+  console.log('This is delayed');
+}, 1000);
+Here, setTimeout is a higher-order function — it takes a function as an argument.
+
+2. Array.map() (takes a function)
+js
+Copy
+Edit
+const nums = [1, 2, 3];
+const doubled = nums.map(n => n * 2);
+
+console.log(doubled); // [2, 4, 6]
+map() is a higher-order function.
+
+It takes a callback function to apply to each element.
+
+3. Returning a function
+js
+Copy
+Edit
+function greet(name) {
+  return function(message) {
+    console.log(`Hello, ${name}. ${message}`);
+  };
+}
+
+const greetJohn = greet("John");
+greetJohn("Welcome!"); // Hello, John. Welcome!
+greet() returns a function → so it’s a higher-order function.
+
+4. Creating custom higher-order functions
+js
+Copy
+Edit
+function repeat(operation, times) {
+  for (let i = 0; i < times; i++) {
+    operation();
+  }
+}
+
+repeat(() => console.log("Doing task..."), 3);
+repeat takes a function as input and runs it times times.
+
+Feature				 Description
+Takes function as argument	 map, filter, reduce, setTimeout, etc.
+Returns a function		 Currying, partial application, factory funcs
+Combines or transforms behavior	 Great for abstraction and reusability
+
+what is factory functions?
+A Factory Function is a function that returns a new object (or function) each time it’s called — like a factory producing a new product.
+It’s a design pattern used to create multiple similar objects without using classes or constructors.
+
+
+ex-
+
+function createUser(name, age) {
+  return {
+    name,
+    age,
+    greet() {
+      console.log(`Hi, I'm ${name} and I'm ${age} years old.`);
+    }
+  };
+}
+
+const user1 = createUser('Alice', 25);
+const user2 = createUser('Bob', 30);
+
+user1.greet(); // Hi, I'm Alice and I'm 25 years old.
+user2.greet(); // Hi, I'm Bob and I'm 30 years old.
+
+ Here, createUser is a factory function because it returns a new user object each time it's called.
+
+ Why Use Factory Functions?
+Simpler than using class or new
+Easy to customize objects
+Great for code reusability and organization
+Can create private variables using closures
+
+Example 2: Factory Function with Closure (private data)
+function secretHolder(secret) {
+  return {
+    getSecret() {
+      return secret;
+    }
+  };
+}
+
+const obj = secretHolder('myPassword123');
+console.log(obj.getSecret()); // 'myPassword123'
+// `secret` is private — cannot access it directly
+
+ The secret variable is private — it’s only accessible via the returned function (getSecret), thanks to closures.
+
+
+Summary
+Factory Function: A function that returns a new object or function.
+Used to create multiple similar objects without classes or constructors.
+Works well with closures, functional patterns, and clean code practices.
+
+ Factory Function vs Constructor Function vs Class
+Feature	Factory 			Function		Constructor (new)		Class
+Returns					Any object		this by default			this
+Uses new keyword			❌ No			✅ Yes				✅ Yes
+Can return custom types			✅ Yes			❌ Limited			❌ Limited
+Uses closure for private data		✅ Yes			❌ No				❌ (without tricks)
+
+
+closures-
+When a function is defined inside another function, and the inner function uses variables from the outer function — that's a closure.
+Even after the outer function is done running, the inner function still has access to the outer function’s variables.
+
+A closure is a function that remembers variables from its outer (lexical) scope, even after that scope has finished executing.
+
+ex-
+
+function outer() {
+  const outerVar = "I am from outer!";
+
+  function inner() {
+    console.log(outerVar); // inner uses variable from outer
+  }
+
+  return inner;
+}
+
+const fn = outer(); // outer() runs and returns inner()
+fn(); // logs: "I am from outer!"
+
+inner() closes over the variable outerVar.
+Even though outer() has finished executing, inner() still remembers outerVar — that’s a closure.
+
+Real-World Analogy
+Think of a closure like a backpack 🎒.
+When a function is created, it carries a backpack that holds all the variables from where it was created.
+Even if it's used somewhere else later, it still has access to those variables in its backpack.
+
+Use Cases of Closures
+1. Data Privacy / Encapsulation
+
+function createCounter() {
+  let count = 0;
+
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const counter1 = createCounter();
+console.log(counter1()); // 1
+console.log(counter1()); // 2
+
+const counter2 = createCounter();
+console.log(counter2()); // 1
+count is private — it’s accessible only to the returned function.
+
+2. Partial Application
+
+function multiply(x) {
+  return function(y) {
+    return x * y;
+  };
+}
+
+const double = multiply(2); // x = 2
+console.log(double(5));     // 10
+The inner function remembers x = 2 — that's closure in action.
+
+3. Callbacks and Asynchronous Code
+
+function delayedGreeting(name) {
+  setTimeout(() => {
+    console.log(`Hello, ${name}`);
+  }, 1000);
+}
+
+delayedGreeting("Alice");
+Even though setTimeout runs after 1 second, the inner arrow function still has access to name due to closure.
+
+Concept				Explanation
+Closure				Inner function remembers variables from outer scope
+Scope				Created at the time function is defined
+Use Cases			Data hiding, factory functions, async logic
+
+
+
+
+call() ,apply() and bind() method-
+------------------------------
+All three methods are used to manipulate the value of this inside a function.
+
+call()
+------
+Calls a function immediately, with a given this and arguments passed individually.
+
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`);
+}
+
+const person = { name: "Alice" };
+
+greet.call(person, "Hello", "!"); // Hello, Alice!
+this → refers to person
+
+"Hello" and "!" are passed as individual arguments
+
+🔹 apply()
+-----------
+Same as call(), but arguments are passed as an array.
+
+greet.apply(person, ["Hi", "."]); // Hi, Alice.
+Useful when you already have arguments in an array
+
+🔹 bind()
+----------
+Does NOT call the function immediately.
+Instead, it returns a new function with this permanently bound.
+
+const greetAlice = greet.bind(person, "Hey");
+greetAlice("?"); // Hey, Alice?
+bind() is great for later use or callbacks.
+
+ex-
+const user = { name: "Bob" };
+
+function say(message) {
+  console.log(`${message}, ${this.name}`);
+}
+
+// call
+say.call(user, "Hello"); // Hello, Bob
+
+// apply
+say.apply(user, ["Hi"]); // Hi, Bob
+
+// bind
+const sayHiToBob = say.bind(user, "Hey");
+sayHiToBob(); // Hey, Bob
+
+Summary Table
+Method	Calls the Function?		this Set To	Arguments Passed As
+call()	✅ Immediately			First argument	Individually: arg1, arg2
+apply()	✅ Immediately			First argument	Array: [arg1, arg2]
+bind()	❌ Returns a new function	First argument	Can be pre-set or passed later
+
+When to Use?
+Use Case				Method
+Immediate function call			call() / apply()
+Pre-binding a function for later use	bind()
+Arguments already in an array		apply()
+
+first class function-
+In JavaScript, functions are first-class citizens.
+
+This means functions can be:
+
+Stored in variables
+Passed as arguments to other functions
+Returned from functions
+Assigned to object properties (Store them in data structures (like arrays, objects))
+
+ex-
+// Assigned to a variable
+const greet = function() {
+  console.log("Hello");
+};
+
+// Passed as an argument
+function callFn(fn) {
+  fn(); // "Hello"
+}
+callFn(greet);
+
+// Returned from a function
+function outer() {
+  return function() {
+    console.log("I'm inner");
+  };
+}
+const inner = outer();
+inner(); // "I'm inner"
+
+*Storing functions in an object or array---
+
+const operations = {
+  add: function(a, b) { return a + b; },
+  subtract: function(a, b) { return a - b; }
+};
+
+console.log(operations.add(10, 5)); // Output: 15
+
+const funcs = [
+  () => console.log("First"),
+  () => console.log("Second")
+];
+
+funcs[1](); // Output: Second
+✅ Functions can be stored inside arrays and objects just like values.
+
+
+Higher-Order Functions (HOF)-
+A Higher-Order Function is a function that either:
+
+Takes one or more functions as arguments, OR
+
+Returns a function.
+
+// 1. Takes function as argument
+function repeat(n, action) {
+  for (let i = 0; i < n; i++) {
+    action(i);
+  }
+}
+repeat(3, console.log); // logs 0 1 2
+
+// 2. Returns a function
+function multiplier(x) {
+  return function(y) {
+    return x * y;
+  };
+}
+const double = multiplier(2);
+console.log(double(5)); // 10
+
+So functions like map, filter, reduce are HOFs.
+
+Why are map, filter, and reduce considered Higher-Order Functions (HOFs)?
+Because:
+
+❗️They take other functions as arguments — specifically, callback functions.
+
+🔍 Let's break it down:
+🔹 map()
+const numbers = [1, 2, 3];
+const doubled = numbers.map(num => num * 2); 
+// `map` takes a function `(num => num * 2)` as input
+
+
+🔹 filter()
+const numbers = [1, 2, 3, 4];
+const even = numbers.filter(num => num % 2 === 0);
+// `filter` takes a function that returns true or false
+
+
+🔹 reduce()
+const numbers = [1, 2, 3];
+const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+// `reduce` takes a reducer function as its first argument
+
+✅ Summary Reason:
+map, filter, and reduce are higher-order functions because they operate on other functions by accepting them as arguments, which is exactly what a higher-order function is defined to do.
+
+What is a Higher-Order Component (HOC)?
+A Higher-Order Component is a function that takes a component and returns a new component.
+
+It’s like a wrapper that adds extra functionality or behavior to an existing component without modifying the original one.
+
+📘 Syntax:
+const EnhancedComponent = higherOrderFunction(WrappedComponent);
+
+✅ Simple Example:
+🎯 Goal: Add logging when a component mounts.
+
+function withLogger(WrappedComponent) {
+  return function EnhancedComponent(props) {
+    console.log(`Component ${WrappedComponent.name} is rendering`);
+    return <WrappedComponent {...props} />;
+  };
+}
+🧩 Usage:
+
+function Hello(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+const HelloWithLogger = withLogger(Hello);
+
+// In App.js
+<HelloWithLogger name="Alice" />
+
+🖨️ Console Output:
+
+Component Hello is rendering
+
+🧠 Key Points:
+Concept					Description
+Takes a component			withLogger(Hello)
+Returns a new component			EnhancedComponent with extra logic
+Does not mutate original		It wraps it and adds behavior, doesn’t change Hello itself
+Passes props through			Always use {...props} to maintain original functionality
+
+🛠 Real-World Use Cases for HOCs
+Use Case			Example Function
+Add logging			withLogger(Component)
+Inject authentication		withAuth(Component)
+Handle loading/spinner		withLoader(Component)
+Reuse form logic		withFormValidation(Component)
+Add theming or styling		withTheme(Component)
+
+⚠️ Caveats of HOCs
+Can cause wrapper hell (deep nesting)
+Harder to trace in DevTools
+Be careful with ref forwarding
+Better suited for logic reuse—now mostly replaced by custom hooks in modern React ---
+
+🚀 HOC vs Hook
+Feature				HOC				Hook
+Based on			Component wrappers		Function logic
+Reuse logic in			Class or function components	Function components only
+Preferred in modern React	❌ Less preferred		✅ Preferred way now
+
+ex2-
+function withUppercase(WrappedComponent) {
+  return function EnhancedComponent(props) {
+    const uppercasedName = props.name.toUpperCase();
+    return <WrappedComponent {...props} name={uppercasedName} />;
+  };
+}
+
+function Greeting({ name }) {
+  return <h2>Hello, {name}</h2>;
+}
+
+const LoudGreeting = withUppercase(Greeting);
+
+// <LoudGreeting name="bob" /> => "Hello, BOB"
+
+What is a Callback Function?
+A callback function is a function passed as an argument to another function, which is then executed later, usually after some operation or event.
+
+It allows asynchronous or deferred execution of code.
+
+🧠 Think of it like this:
+You ask a friend (a function) to call you (your callback function) once they’re done with a task. That’s a callback.
+
+🧪 Basic Example
+
+function greetUser(name, callback) {
+  console.log("Hello " + name);
+  callback(); // <-- this is the callback function
+}
+
+function sayBye() {
+  console.log("Goodbye!");
+}
+
+greetUser("Alice", sayBye);
+🖨️ Output:
+Hello Alice
+Goodbye!
+
+🔁 Real-Life Analogy
+Imagine you're baking a cake:
+
+
+function bakeCake(callback) {
+  console.log("Baking the cake...");
+  setTimeout(() => {
+    console.log("Cake is ready!");
+    callback(); // Notify when cake is ready
+  }, 2000);
+}
+
+function serveCake() {
+  console.log("Serving the cake.");
+}
+
+bakeCake(serveCake);
+
+🖨️ Output after 2 seconds:
+
+Baking the cake...
+Cake is ready!
+Serving the cake.
+
+📚 Where are Callbacks used?
+1. Array methods like map, filter, forEach use callbacks:
+
+[1, 2, 3].forEach(function (num) {
+  console.log(num * 2);
+});
+
+2. Event Handling:
+
+button.addEventListener("click", function () {
+  alert("Button clicked!");
+});
+
+3. Asynchronous APIs:
+
+setTimeout(function () {
+  console.log("Executed after 1 second");
+}, 1000);
+
+🚫 Callback Hell
+When callbacks are nested deeply, it becomes messy and hard to maintain:
+
+doTask1(function () {
+  doTask2(function () {
+    doTask3(function () {
+      console.log("All tasks done");
+    });
+  });
+});
+✅ Solution: Use Promises or async/await.
+
+✅ Summary
+Feature						Description
+What is it?					A function passed into another function as an argument
+When used?					After some task/event completes
+Used in						setTimeout, event listeners, APIs, map, filter, etc.
+Problems					Callback hell in deeply nested logic
+Solution					Promises and async/await
+
+
+What is a Promise?
+A Promise is an object representing the eventual completion or failure of an asynchronous operation.
+
+Syntax:
+
+const promise = new Promise((resolve, reject) => {
+  // async task
+});
+
+✅ States of a Promise:
+State		Meaning
+pending		Initial state, not fulfilled/rejected
+fulfilled	Operation completed successfully
+rejected	Operation failed
+
+🧪 Example:
+
+const fetchData = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Data received!");
+      // Or reject("Failed to fetch data");
+    }, 2000);
+  });
+};
+
+fetchData()
+  .then((data) => console.log(data))     // ✅ success
+  .catch((err) => console.error(err));   // ❌ failure
+
+Output after 2 seconds:
+
+Data received!
+
+🔹 2. Why use Promises?
+They solve the problem of callback hell, by making async code cleaner and more readable.
+
+🔹 3. What is async/await?
+async/await is syntactic sugar over Promises that lets you write asynchronous code like it's synchronous.
+
+🧪 Example with async/await:
+
+
+const fetchData = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Fetched with async/await!");
+    }, 2000);
+  });
+};
+
+async function getData() {
+  try {
+    const result = await fetchData();
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+getData();
+Output after 2 seconds:
+
+Fetched with async/await!
+
+✅ Comparison: .then() vs async/await
+With .then():
+
+fetchData().then((data) => {
+  console.log(data);
+});
+
+With async/await:
+
+const data = await fetchData();
+console.log(data);
+
+✅ Summary Table
+
+Feature			Promise				async/await
+Syntax style		Chained with .then()		Looks like synchronous code
+Error handling		.catch()			try...catch block
+Cleaner code		❌ Can be messy with nesting	✅ Very clean and readable
+Return value		Promise object			Actual resolved value
+
+What is fetch()?
+fetch() is a built-in JavaScript function used to make HTTP requests (like GET, POST, PUT, DELETE) and handle responses — typically used to fetch data from APIs.
+It returns a Promise.
+
+fetch(url, options)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    title: "My Post",
+    body: "Post content",
+    userId: 1,
+  }),
+})
+  .then(response => response.json())
+  .then(data => console.log("Created:", data))
+  .catch(error => console.error("Error:", error));
+
+ Using fetch() with async/await (cleaner)
+
+async function getPost() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Fetch error:", error);
+  }
+}
+
+getPost();
+
+Common Options in fetch()
+Option	Description
+method	HTTP method: GET, POST, PUT, DELETE
+headers	Headers to send (e.g., Content-Type)
+body	Data to send (usually JSON for POST/PUT)
+mode	CORS, no-cors, same-origin
+
+fetch() does not reject on HTTP errors (like 404). You must check response.ok.
+
+if (!response.ok) {
+  throw new Error("Network response was not OK");
+}
+
+async and defer attribute-
+----------------------------
+
+The async and defer attributes are used in the <script> tag in HTML to control how JavaScript files are loaded and executed. They are particularly useful for improving page load performance by preventing scripts from blocking HTML parsing.
+
+1. async Attribute
+When to use: For scripts that do not depend on any other scripts or DOM elements (e.g., analytics).
+
+Behavior:
+
+Script is fetched asynchronously.
+Script is executed as soon as it is downloaded, without waiting for the HTML to finish parsing.
+Can cause issues if the script relies on DOM elements that haven’t loaded yet.
+
+<script src="script.js" async></script>
+
+2. defer Attribute
+When to use: For scripts that depend on the DOM being fully parsed but not necessarily on other scripts.
+
+Behavior:
+
+Script is fetched asynchronously.
+Script is executed only after the HTML has been completely parsed.
+Maintains execution order for multiple scripts with defer.
+
+<script src="script.js" defer></script>
+
+Recommendation:
+Use defer for scripts that manipulate the DOM or depend on other scripts.
+Use async for independent scripts like analytics or ads.
+
+
+Debouncing and throttling are performance optimization techniques used to limit how often a function is executed, especially for high-frequency events like scroll, resize, keypress, or input.
+
+🔁 Debouncing
+-------------------
+✅ What it does:
+Delays the function call until after a specified "quiet" period has passed since the last time the event was triggered.
+
+📌 Use Case:
+Search input where API calls are made only after the user stops typing.
+Resize or window scroll where you only want to react after the user stops resizing or scrolling.
+
+⏱ Behavior:
+Only the last function call is executed after the delay.
+
+📦 Example in JavaScript:
+
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// Usage
+window.addEventListener('resize', debounce(() => {
+  console.log('Resized!');
+}, 300));
+
+🕒 Throttling
+------------------
+✅ What it does:
+Ensures a function is called at most once in a specified time interval, no matter how many times the event is triggered.
+
+📌 Use Case:
+Scroll or mousemove events where you want regular updates (like loading content or updating position), but not too frequently.
+Button click handlers to prevent spamming.
+
+⏱ Behavior:
+Executes the function at regular intervals, ignoring repeated calls during the wait.
+
+📦 Example in JavaScript:
+
+function throttle(fn, interval) {
+  let lastCall = 0;
+  return function(...args) {
+    const now = Date.now();
+    if (now - lastCall >= interval) {
+      lastCall = now;
+      fn.apply(this, args);
+    }
+  };
+}
+
+// Usage
+
+window.addEventListener('scroll', throttle(() => {
+  console.log('Scroll event');
+}, 200));
+
+🔍 Key Difference
+Feature			Debounce				Throttle
+Timing			Executes after delay (last event)	Executes at intervals
+Use case		Wait until user stops doing action	Limit function to once per X ms
+Execution style		Only the final call is triggered	First call + regular intervals
+
+
+
+children props in react-
+--------------------------
+const Card = (props) => {
+  return (
+    <div className="card">
+      {props.children}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Card>
+      <h2>Title</h2>
+      <p>This is some content inside the card!</p>
+    </Card>
+  );
+};
+
+In the Card component, props.children represents whatever is placed inside <Card>...</Card>.
+children prop	A special prop that holds nested JSX
+
+How children works:
+React automatically assigns any nested JSX to the children prop.
+
+It can be:
+
+A single element
+Multiple elements
+Text
+A function (in some advanced use cases)
+
+Why use children?
+
+It helps in:
+Creating layout or wrapper components.
+Reusing component structures.
+Composing UIs dynamically.
+
+
+What is a Polyfill?
+A polyfill is like a backup plan.
+Some old browsers don’t understand new JavaScript features. So, we write our own version of that feature — that's called a polyfill.
+Think of it like this:
+If your browser doesn’t know how to do something, we teach it using a polyfill.
+
+What is .bind()?
+The .bind() method is used to lock the value of this inside a function.
+
+const person = {
+  name: "Sam"
+};
+
+function sayName() {
+  console.log(this.name);
+}
+
+const saySam = sayName.bind(person);
+saySam(); // It prints "Sam"
+
+✅ bind() makes sure that this inside sayName always refers to the person object.
+
+Simple Polyfill for .bind()
+---------------------------
+Now imagine old browsers don’t understand .bind().
+We create our own version like this:
+
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(context, ...args) {
+    const fn = this;
+    return function(...newArgs) {
+      return fn.apply(context, args.concat(newArgs));
+    };
+  };
+}
+
+
+🧾 Simple Explanation of the Above Polyfill:
+Check if bind exists:
+If not, we define it.
+
+Inside the custom bind:
+
+context → the object we want this to refer to.
+args → any arguments we give in advance.
+fn = this → the original function we're binding.
+We return a new function that:
+Combines old + new arguments.
+Calls the original function using fn.apply.
+
+Example Using the Polyfill
+
+function greet(greeting, punctuation) {
+  console.log(greeting + " " + this.name + punctuation);
+}
+
+const user = { name: "Alice" };
+
+const greetUser = greet.bind(user, "Hi");
+greetUser("!"); // Output: Hi Alice!
+➡️ Even if your browser didn't know bind(), with the polyfill, it will behave the same way!
+
+✅ In Short:
+Polyfill = Backup code to support older browsers.
+.bind() = Locks this to a specific object.
+Polyfill for bind = We create a version of .bind() if it's not already available.
+
+
+
+
+What is Prop Drilling in React?
+📌 Definition:
+Prop Drilling is the process of passing data (props) from a parent component down to deeply nested child components through intermediate components — even if those intermediate components don't use the data.
+
+🔧 Example of Prop Drilling
+jsx
+Copy
+Edit
+// App.js
+import React from 'react';
+import Parent from './Parent';
+
+function App() {
+  return <Parent username="John" />;
+}
+
+export default App;
+jsx
+Copy
+Edit
+// Parent.js
+import React from 'react';
+import Child from './Child';
+
+const Parent = ({ username }) => {
+  return <Child username={username} />;
+};
+
+export default Parent;
+jsx
+Copy
+Edit
+// Child.js
+import React from 'react';
+
+const Child = ({ username }) => {
+  return <p>Hello, {username}!</p>;
+};
+
+export default Child;
+❌ Problem:
+Here, the username prop is passed through Parent even though Parent doesn’t use it. This becomes hard to manage as the component tree grows.
+
+✅ Solution:
+Use Context API or state management tools (like Redux) to avoid prop drilling.
+
+
+Why does useState not reflect the updated value immediately?
+--------------------------------------------------------------------
+When you update a state using useState, the updated value is not available immediately in the next line.
+
+This is because:
+
+State updates in React are asynchronous and batched for performance.
+
+🔍 Example
+const [count, setCount] = useState(0);
+
+function handleClick() {
+  setCount(count + 1);
+  console.log(count); // ❌ Still prints the old value
+}
+Here, setCount(count + 1) schedules a state update, but it doesn’t update count right away. So console.log(count) still shows the old value.
+
+🔄 What's really happening?
+setCount(count + 1) tells React: “Hey, I want to update count.”
+
+React schedules the update to run after the current render finishes.
+
+On the next render, count will have the new value.
+
+✅ How to get the updated value correctly?
+1. Use useEffect to react to state changes:
+useEffect(() => {
+  console.log("Updated count:", count);
+}, [count]);
+
+This runs after the count state is updated and the component is re-rendered.
+
+2. Or use a function to update state:
+
+setCount(prevCount => {
+  console.log("Previous count:", prevCount); // ✅ Correct value
+  return prevCount + 1;
+});
+Using the function form of setCount() gives you the latest state.
+
+🧠 Summary
+❓ Question						✅ Answer
+Why doesn't updated state reflect immediately?		Because useState updates are asynchronous and batched
+How to see updated state?				Use useEffect() or setState(prev => ...)
+Does console.log() immediately after setCount() work?	❌ No, it logs the old value
+
+
+
+Custom hooks-
+---------------
+custom hooks- is about the reuasability.
+is use to reuse stateful logic among multiple components. any logic that can one or more hooks which is non visual logic .
+
+A custom hook is simply a JavaScript function whose name starts with "use" and which can call other hooks (useState, useEffect, etc.).
+
+📌 Purpose: To reuse logic across multiple components without duplicating code.
+
+It’s a way to extract and share logic that would otherwise be repeated across components.
+
+💡 Why Use Custom Hooks?
+To remove duplicated logic
+
+To make code cleaner and more modular
+
+To make component files easier to read
+
+To share behavior like fetching data, form handling, timers, etc.
+
+✅ Basic Example: useCounter Custom Hook
+Step 1: Create the custom hook
+
+// useCounter.js
+import { useState } from 'react';
+
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
+  const reset = () => setCount(initialValue);
+
+  return { count, increment, decrement, reset };
+}
+
+export default useCounter;
+
+Step 2: Use it in a component
+
+// CounterComponent.js
+import React from 'react';
+import useCounter from './useCounter';
+
+function CounterComponent() {
+  const { count, increment, decrement, reset } = useCounter(5); // start at 5
+
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={increment}>➕ Increment</button>
+      <button onClick={decrement}>➖ Decrement</button>
+      <button onClick={reset}>🔁 Reset</button>
+    </div>
+  );
+}
+🔄 Another Real-World Example: useFetch for API Calls
+
+Step 1: Create the hook
+
+// useFetch.js
+import { useEffect, useState } from 'react';
+
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Network error");
+        const json = await res.json();
+        setData(json);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [url]);
+
+  return { data, loading, error };
+}
+
+export default useFetch;
+
+Step 2: Use it in a component
+
+// UserList.js
+import React from 'react';
+import useFetch from './useFetch';
+
+function UserList() {
+  const { data, loading, error } = useFetch('https://jsonplaceholder.typicode.com/users');
+
+  if (loading) return <p>Loading users...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <ul>
+      {data.map(user => (
+        <li key={user.id}>{user.name} ({user.email})</li>
+      ))}
+    </ul>
+  );
+}
+📌 Rules for Custom Hooks
+Name must start with use (e.g., useCounter, useForm)
+
+You can use other hooks inside a custom hook
+
+You must follow the Rules of Hooks:
+
+Only call hooks at the top level (not inside conditions or loops)
+
+Only call hooks inside function components or other custom hooks
+
+🧠 Summary
+Feature	Description
+🔁 Reusable Logic	Encapsulate common code into functions
+📦 Cleaner Components	Keeps components focused on rendering
+⚙️ Hook Friendly	Can use useState, useEffect, etc.
+
+
+
+
+What is Batching in React?
+Batching means that multiple state updates are grouped together into a single re-render, instead of triggering a re-render for each individual state change.
+
+✅ Why Batching?
+Improves performance.
+Prevents unnecessary renders.
+
+Advanced Concepts
+1. Stopping Propagation
+
+event.stopPropagation(); // Prevent event bubbling
+
+2. Preventing Default Behavior
+
+event.preventDefault(); // Stop form submission, link redirect, etc.
+
+
+Why Use preventDefault()?
+Many browser events have a default behavior. If you want to override or stop that behavior, you use preventDefault().
+
+1. 📝 Prevent Form Submission
+
+function handleSubmit(e) {
+  e.preventDefault(); // Prevent page reload
+  console.log("Form submitted!");
+}
+
+return (
+  <form onSubmit={handleSubmit}>
+    <button type="submit">Submit</button>
+  </form>
+);
+
+ Default behavior:
+Browser reloads or navigates to another page on submit.
+
+After preventDefault():
+You handle the form submission logic yourself, such as validation or API calls.
+
+
+2. Prevent Link Navigation
+
+
+function handleClick(e) {
+  e.preventDefault(); // Prevent link from navigating
+  alert("Link clicked, but not navigating!");
+}
+
+return <a href="https://google.com" onClick={handleClick}>Google</a>;
+
+
+
+ Important Notes
+In React, e is a SyntheticEvent, not a native DOM event.
+
+You still call e.preventDefault() exactly the same way.
+
+It works identically across all browsers thanks to React's event system.
+
+ When Should You Use It?
+
+| Use Case                        | Use `preventDefault()`?  |
+| ------------------------------- | ------------------------ |
+| Prevent form page reload        | ✅ Yes                    |
+| Prevent link navigation         | ✅ Yes                    |
+| Block drag-and-drop behavior    | ✅ Yes                    |
+| Custom right-click context menu | ✅ Yes (on `contextmenu`) |
+| Button click                    | ❌ Usually not needed     |
+
+
+| Method              | Purpose                          |
+| ------------------- | -------------------------------- |
+| `preventDefault()`  | Prevent browser’s default action |
+| `stopPropagation()` | Stop event from bubbling up      |
+
+
+what happen if i define multiple useEffect hooks in react in 1 compoenent
+---------------------------------------------------------------------------
+What Happens If You Use Multiple useEffects?
+➤ All useEffect hooks will run independently.
+They are executed in the order they are defined.
+
+Each useEffect hook can have:
+
+its own logic
+its own dependency array
+its own cleanup
+
+💡 Why Use Multiple useEffect Hooks?
+✅ For separation of concerns.
+Example:
+
+
+useEffect(() => {
+  console.log("Fetching data...");
+}, []);
+
+useEffect(() => {
+  console.log("Setting up event listener...");
+  return () => console.log("Cleaning up event listener");
+}, []);
+
+useEffect(() => {
+  console.log("Listening to props change:", someProp);
+}, [someProp]);
+
+🧠 This is better than:
+
+useEffect(() => {
+  // Fetch data
+  // Set up event listeners
+  // Watch props
+}, []);
+Splitting them makes code easier to read, debug, and maintain.
+
+🔄 Execution Order
+If you write:
+
+useEffect(() => {
+  console.log('Effect 1');
+}, []);
+
+useEffect(() => {
+  console.log('Effect 2');
+}, []);
+
+You will see:
+
+Effect 1
+Effect 2
+And on unmount, cleanup runs in reverse order:
+
+Cleanup of Effect 2
+Cleanup of Effect 1
+
+
+ Important Rules
+useEffect should always be called at the top level (not conditionally).
+Order of definition matters for cleanup.
+Each useEffect must return either nothing or a cleanup function.
+
+
+| Feature                | Behavior                       |
+| ---------------------- | ------------------------------ |
+| Multiple `useEffect`s? | ✅ Allowed                      |
+| Execution order        | 🔼 Top to bottom               |
+| Cleanup order          | 🔽 Bottom to top               |
+| Purpose                | Logical separation of concerns |
+
+

@@ -1,0 +1,81 @@
+The Context API is a feature in React that allows you to share state and data across components without having to pass props manually at every level.
+It's especially useful for managing global state like user authentication, themes, language settings, or data shared across many components.
+
+1. Create Context
+
+import { createContext } from 'react';
+
+export const MyContext = createContext();
+
+
+2. Create a Provider Component
+
+import React, { useState } from 'react';
+import { MyContext } from './MyContext';
+
+const MyProvider = ({ children }) => {
+  const [value, setValue] = useState("Hello from Context");
+
+  return (
+    <MyContext.Provider value={{ value, setValue }}>
+      {children}
+    </MyContext.Provider>
+  );
+};
+
+export default MyProvider;
+
+
+3. Wrap your App with the Provider
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import MyProvider from './MyProvider';
+
+ReactDOM.render(
+  <MyProvider>
+    <App />
+  </MyProvider>,
+  document.getElementById('root')
+);
+
+
+
+4. Consume Context in Components
+
+import React, { useContext } from 'react';
+import { MyContext } from './MyContext';
+
+const MyComponent = () => {
+  const { value, setValue } = useContext(MyContext);
+
+  return (
+    <div>
+      <h1>{value}</h1>
+      <button onClick={() => setValue("Updated value!")}>
+        Update Value
+      </button>
+    </div>
+  );
+};
+
+export default MyComponent;
+
+
+
+
+When to Use Context API
+------------------------
+Use it when:
+You need to share state/data across many components.
+Props drilling becomes too cumbersome.
+You want a centralized way to manage state for small to medium-sized apps.
+
+
+When Not to Use Context API
+-------------------------------
+Avoid using it for frequently updating values (e.g., real-time updates, mouse movements, etc.) as it can cause performance issues due to re-renders.
+
+
+

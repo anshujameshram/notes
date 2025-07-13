@@ -1,0 +1,130 @@
+1. Component
+A component is a reusable piece of UI defined as a JavaScript function or class.
+
+Function Component (preferred way):
+
+
+function Greeting(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+Class Component (older style):
+
+
+class Greeting extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+🔹 Think of a component as a template or blueprint.
+
+
+2. Element
+A React element is an object that describes what you want to see on the screen. It's what gets returned from a component (using JSX).
+
+Example:
+
+
+const element = <Greeting name="John" />;
+React converts this JSX into something like:
+
+
+{
+  type: Greeting,
+  props: { name: 'John' },
+}
+🔹 Elements are lightweight, immutable descriptions of what to render.
+
+
+
+3. Instance
+An instance is the rendered version of a component, maintained by React internally during the rendering process.
+
+For class components, it’s the actual instance of the class (new Greeting()).
+
+For function components, React internally tracks the "instance-like" state using hooks (though you don’t get an actual instance object).
+
+You rarely deal directly with "instances" in function components, but they are part of React's internal lifecycle.
+
+🔹 An instance represents the live version of a component that React has rendered and is tracking.
+
+| Term      | What it is                            | Example                          | Analogy                         |
+| --------- | ------------------------------------- | -------------------------------- | ------------------------------- |
+| Component | A blueprint/template (function/class) | `function Greeting(props) {...}` | Like a class in OOP             |
+| Element   | A description of a component          | `<Greeting name="John" />`       | Like an object creation         |
+| Instance  | The live, working version in the UI   | Internally managed by React      | Like a real-time object running |
+
+
+It's what React uses internally to:
+
+Track state and props
+Manage the component's lifecycle (e.g., mounting, updating, unmounting)
+Connect to the DOM or virtual DOM
+
+
+
+
+Class Components
+-----------------------
+For class components, the "instance" is very clear — it's the actual object created using the new keyword:
+
+
+class MyComponent extends React.Component {
+  componentDidMount() {
+    console.log("Mounted");
+  }
+
+  render() {
+    return <div>Hello</div>;
+  }
+}
+When React renders <MyComponent />, it creates an instance like:
+
+
+const instance = new MyComponent(props);
+You can think of this as a traditional object in OOP, which has its own properties and lifecycle methods.
+
+
+
+Function Components
+-------------------------
+For function components, there is no actual instance object created by new. Instead, React uses an internal structure to keep track of things like:
+
+Hooks (e.g., useState, useEffect)
+Render output
+Effects queue
+
+
+
+ex-
+function MyComponent() {
+  const [count, setCount] = useState(0);
+  return <button>{count}</button>;
+}
+
+
+
+Even though there's no "instance" you can touch, React still creates and tracks a structure behind the scenes to manage this component’s behavior.
+
+
+
+Why does "instance" matter?
+------------------------------
+React needs to remember each component on the screen: what props it had, what state it's in, etc.
+React stores this info in the instance (class) or in a "fiber node" (function).
+When re-rendering, React compares the current instance/fiber with the next one to decide what to update.
+
+
+| Component Type     | Instance Exists? | Description                      |
+| ------------------ | ---------------- | -------------------------------- |
+| Class Component    | ✅ Yes            | Object created from class        |
+| Function Component | ⚠️ Not directly  | Internally tracked using "fiber" |
+
+
+
+
+
+
+
+
+

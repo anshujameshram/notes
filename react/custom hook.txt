@@ -1,0 +1,48 @@
+if a function is not starting from use and does not contain any hooks then can it be a custom hook?
+
+
+No, if a function does not start with use and does not use any React hooks internally, then it is not a custom hook.
+
+🔍 What is a Custom Hook in React?
+A custom hook in React is:
+
+A JavaScript function that starts with use
+
+It calls other hooks internally (like useState, useEffect, etc.)
+
+It follows the Rules of Hooks (e.g., only call hooks at the top level, not conditionally)
+
+
+ Valid Custom Hook Example:
+----------------------------
+function useCounter(initialValue = 0) {
+  const [count, setCount] = useState(initialValue);
+  return [count, () => setCount(count + 1)];
+}
+
+❌ Not a Custom Hook:
+
+function calculateSum(a, b) {
+  return a + b;
+}
+It doesn’t start with use
+
+It doesn’t use any React hooks
+
+So, it's just a regular utility function.
+
+
+✅ Conclusion:
+To be considered a custom hook:
+
+The function must start with use
+
+It must use at least one React hook inside
+
+If it fails either of these, it's not a custom hook — just a regular JavaScript function.
+
+Let me know if you want help turning a regular function into a custom hook!
+
+
+
+

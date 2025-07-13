@@ -1,0 +1,157 @@
+Memoization is an optimization technique used to speed up function calls by caching the results of expensive function calls and 
+returning the cached result when the same inputs occur again.
+
+
+Concept of Memoization
+--------------------------
+Let’s break it down simply:
+
+You call a function with a set of arguments.
+Instead of calculating the result every time, the function checks:
+
+Have I seen these arguments before?
+If yes → return the cached result.
+If no → calculate, cache it, and return the result.
+
+
+Use Case Example: Expensive Function
+Let’s say we have a slow function like calculating a Fibonacci number recursively:
+
+
+function fib(n) {
+  if (n <= 1) return n;
+  return fib(n - 1) + fib(n - 2);
+}
+This is very slow for large n because it repeats calculations.
+
+Now let's memoize it:
+
+
+example using closure-
+
+function memoizedFib() {
+  let cache = {};
+
+  return function fib(n) {
+    if (n in cache) {
+      console.log("Fetching from cache:", n);
+      return cache[n];
+    } else {
+      console.log("Calculating result:", n);
+      if (n <= 1) return n;
+      cache[n] = n*n;
+      return cache[n];
+    }
+  };
+}
+
+const fibonacci = memoizedFib();
+console.log(fibonacci(2)); 
+console.log(fibonacci(3));
+console.log(fibonacci(2));
+console.log(fibonacci(5));
+
+
+
+example using higher order function-
+
+function memoizedFib(fn) {
+  let cache = {};
+
+  return function fib(...n) {
+      let key = JSON.stringify(n);
+      console.log(key);
+    if (key in cache) {
+      console.log("in cache:");
+      return cache[key];
+    } else {
+      console.log("not in cache");
+      let result=fn(...n)
+      cache[key]=result;
+      console.log(cache);
+      return result;
+    }
+  };
+}
+
+function cacl1(a,b,c,d){
+    return a+b+c+d;
+}
+const fibonacci = memoizedFib(cacl1);
+console.log(fibonacci(1,2,3,4)); 
+console.log(fibonacci(2,3,4,5));
+console.log(fibonacci(1,2,3,4));
+
+
+
+example-
+function memoize(fn) {
+  const cache = new Map();
+
+  return function (...args) {
+    const key = JSON.stringify(args); // works for primitives
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    const result = fn.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+function add(a, b) {
+  console.log("Calculating...");
+  return a + b;
+}
+
+const memoizedAdd = memoize(add);
+
+console.log(memoizedAdd(1, 2)); // Calculates
+console.log(memoizedAdd(1, 2)); // Cached
+
+
+Where to Use Memoization
+Memoization is useful when:
+
+The function is pure (same input → same output).
+
+Function is expensive (heavy computation or API call).
+
+You call the function repeatedly with the same inputs.
+
+
+Use memoization when:
+
+"The same work is done again and again with the same input, and it’s okay to cache the output."
+
+
+
+When to Use memoize()
+Use memoization when:
+
+1. The function is pure
+Pure = Same input always returns the same output and has no side effects.
+
+✅ Ideal for memoization.
+
+Example:
+
+
+function add(a, b) {
+  return a + b;
+}
+2. Function is expensive (CPU-heavy)
+Calculations take time and are called repeatedly with same input.
+
+Examples:
+
+Fibonacci, factorial, recursive tree traversal
+
+Image processing, deep JSON parsing, etc.
+
+3. You expect repeated inputs
+Functions called multiple times with the same arguments.
+
+Example:
+
+Searching/filtering data on client side
